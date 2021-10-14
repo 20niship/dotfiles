@@ -51,6 +51,13 @@ curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh >
 sh ./dein_installer.sh ~/.cache/dein
 
 
+echo "------------------------------   Install Node js ------------------------------"
+# 最新バージョンのNode.jsをインストールする
+# 確実にインストールするには、公式サイトからBinaryをダウンロードし、指定の場所に解凍→PATHに追加のほうが良い
+# curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+# sudo apt install -y nodejs
+
+
 echo "------------------------------   Install Docker  ------------------------------"
 # Docker, docker-compose
 # 公式サイトの通りにするとエラーがでるので　、下記サイトを参考に行う
