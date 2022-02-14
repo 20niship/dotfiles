@@ -244,6 +244,7 @@ alias mkdir='mkdir -p'
 alias ..='cd ../'
 alias back='pushd'
 alias diff='diff -U1'
+alias py='python3'
 
 # alias tma='tmux attach'
 # alias tml='tmux list-window'
@@ -309,7 +310,7 @@ source ~/.zplug/init.zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "b4b4r07/enhancd", use:init.sh
+# zplug "b4b4r07/enhancd", use:init.sh
 #zplug "junegunn/fzf-bin", as:command, from:gh-r, file:fzf
 
 # インストールしていないプラグインをインストール
@@ -377,37 +378,20 @@ function gs() {
 }
 
 
-
-
-hcd() {
-  dirname=`fd . ~/Desktop / -aHI --type d --exclude .git --exclude Labo/Qt --exclude build --exclude _build \
-    --exclude .build --exclude mbed-os --exclude .cache --exclude node_modules \
-    --exclude cmake_build --exclude bin --exclude keyboards --exclude tests --exclude boost-for-raspi \
-    --exclude typings --exclude external --exclude .deps \
-    --exclude python3.8 \
-    --exclude Quiver.qvlibrary | fzf-tmux`
-  if [[ $dirname == ""  ]]; then
-  else
-    pushd $dirname > /dev/null
-  fi
-}
-
-fcd() {
-  dirname=`fd . --type d --exclude .git | fzf-tmux`
-  if [[ $dirname == ""  ]]; then
-  else
-    pushd $dirname > /dev/null
-  fi
+# fd - cd to selected directory
+# sudo apt-get install fzf
+fd() {
+  local dir
+  # dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
+  dir=$(find ~/デスクトップ -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
 }
 
 
 zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
-
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
 
 # コマンドを自動で修正するのをDisableにする
@@ -415,13 +399,13 @@ unsetopt correct;
 unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
-export PATH=${PATH}:~/.robotech/nodejs/bin/:~/.robotech/cmdline-tools
+export PATH=${PATH}:~/.myenv/nodejs/bin/:~/.myenv/cmake/bin
 
-export CC=gcc-10
-export CXX=g++-10
+export CC=gcc-11
+export CXX=g++-11
 
-export ANDROID_HOME=/usr/lib/android-sdk
-export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
-export ANDROID_SDK_ROOT=$ANDROID_HOME
+# export ANDROID_HOME=/usr/lib/android-sdk
+# export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+# export ANDROID_SDK_ROOT=$ANDROID_HOME
 # tmux source ~/.tmux.conf
 
