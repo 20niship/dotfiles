@@ -8,7 +8,6 @@ set laststatus=2
 set ruler
 set history=1000
 set number "行頭に数字を表示する
-set foldmethod=marker "foldを使用する           
 set cursorline        "current lineをマークアップ           
 set hls               "検索文字のハイライト　               
 set expandtab         "タブ入力を空白に置き換える         
@@ -17,8 +16,6 @@ set shiftwidth=2      "自動インデント幅
 set smartindent       "改行時に入力された行末に合わせて、次の行のインデントを調整する    
 set linebreak         "word wrapping                                                     
 set clipboard=unnamed "nvimのyankとmacのクリップボードを共有する
-
-
 set title "タイトルにパスを表示する
 set vb t_vb= "ベルをオフにするこれを使用すると、いちいちビープ音が鳴らない
 
@@ -56,11 +53,19 @@ set wildmenu wildmode=longest:full,full
 " set foldenable
 " set foldcolumn=1 " 左側に折りたたみガイド表示
 " set foldmethod=indent " 折畳の判別
+set foldmethod=syntax "foldを使用する           
 " set foldtext=Mopp_fold() " 折りたたみ時の表示設定
 " set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo " fold内に移動すれば自動で開く
-set nofoldenable    " disable folding
+set nofoldenable    " ファイルを開いたときには折りたたみを展開して表示 
 
+set laststatus=2      " 下のステータスライン
+set noshowmode        " デフォルトのステータスラインを消す
+set showtabline=2
+set statusline=2      " ステータスラインの記述
 
+" Esc SETTINGS
+inoremap jk <Esc>
+inoremap jj <Esc>
 
 " 閉じカッコの自動補間
 inoremap { {}<LEFT>
@@ -69,18 +74,20 @@ inoremap ( ()<LEFT>
 inoremap " ""<LEFT>
 inoremap ' ''<LEFT>
 
+tnoremap <Esc> <C-\><C-n> " terminalからESCで抜けられるようにする
+command! -nargs=* T split | wincmd j | resize 15 | terminal <args>
+" VSCodeのように :term でターミナルを開いたときには画面下部に表示する
+autocmd TermOpen * startinsert " ターミナルを開いたときはデフォルトでインサートモードにする
+
+
 set encoding=utf8
 syntax enable
 
 let g:vimsyn_embed='lPr' " Luaでシンタックスハイライト
 
 
-" Esc SETTINGS
-inoremap jk <Esc>
-inoremap jj <Esc>
-
 " #################    DEINの設定   ###################
-if &compatible                                                                                                                      
+if &compatible
   set nocompatible               " Be iMproved                      
 endif
 
@@ -91,8 +98,10 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " VSCodeのようなカラースキームにする(カッコが見にくいので却下)
-  " call dein#add('tomasiser/vim-code-dark')
-  call dein#add('joshdick/onedark.vim')
+  call dein#add('tomasiser/vim-code-dark')
+  call dein#add('Mofiqul/vscode.nvim')
+  " call dein#add('tomasr/molokai')
+  " call dein#add('joshdick/onedark.vim')
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
@@ -102,15 +111,15 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('ryanoasis/vim-devicons')
 
-
   call dein#add('neovim/nvim-lspconfig')
-  call dein#add('nvim-lua/completion-nvim')
-  " deocomplete : Vimの補完プラグインneocompleteのNeoVim版
-  " call dein#add('Shougo/deoplete.nvim')
-  " if !has('nvim')
-  "   call dein#add('roxma/nvim-yarp')
-  "   call dein#add('roxma/vim-hug-neovim-rpc')
-  " endif
+  call dein#add('williamboman/nvim-lsp-installer')
+  call dein#add('hrsh7th/cmp-nvim-lsp')
+  call dein#add('hrsh7th/cmp-buffer')
+  call dein#add('hrsh7th/cmp-path')
+  call dein#add('hrsh7th/cmp-cmdline')
+  call dein#add('hrsh7th/nvim-cmp')
+  call dein#add('hrsh7th/cmp-vsnip')
+  call dein#add('hrsh7th/vim-vsnip')
 
   " Windowのリサイズをやりやすくする
   call dein#add('simeji/winresizer')
@@ -119,7 +128,7 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('tpope/vim-commentary')
 
   " gitいろいろ 
-  call dein#add('airblade/vim-gitgutter')
+  " call dein#add('airblade/vim-gitgutter')
 
   " インデントに薄く縦線をつける
   call dein#add('Yggdroot/indentLine')
@@ -142,6 +151,9 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('lambdalisue/fern-mapping-git.vim')
   call dein#add('lambdalisue/fern-bookmark.vim')
   call dein#add('lambdalisue/fern-hijack.vim')
+
+  " jupyter notebookを使えるようにする
+  call dein#add('goerz/jupytext.vim')
 call dein#end()
 
 filetype plugin indent on         
@@ -154,7 +166,9 @@ filetype plugin indent on
 
 
 " ################# 各種プラグインの設定 #################
-colorscheme onedark
+" colorscheme onedark
+" colorscheme molokai 
+colorscheme codedark 
 
 " --------------- Nerd Tree --------------------------------
 " nmap <C-n> :NERDTreeToggle<CR>
@@ -175,13 +189,13 @@ colorscheme onedark
 "   autocmd FileType nerdtree nnoremap 5j
 "   autocmd FileType nerdtree nnoremap 5k
 " augroup END
+
 " let NERDTreeMapOpenInTab='<ENTER>' " Enterキーで新しいタブで開く
 
 
 " ---------------  airline --------------------------------
 " Airline SETTINGS
 let g:airline_powerline_fonts = 1
-
 " let g:airline#extensions#bufferline#enabled = 1
 " let g:airline#extensions#denite#enabled = 1
 let g:airline#extensions#wordcount#enabled = 0
@@ -204,19 +218,14 @@ let g:airline_left_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_stl_path_style = 'short'
-let g:airline_theme = 'onedark'
-set laststatus=2                " 下のステータスライン
-set noshowmode                  " デフォルトのステータスラインを消す
-set showtabline=2
-set statusline=2                " ステータスラインの記述
+" let g:airline_theme = 'onedark'
+let g:airline_theme = 'codedark'
+" let g:airline_theme = 'molokai'
 
+" タブの切り替え
+nmap <C-p> <Plug>AirlineSelectPrebTab
+nmap <C-n> <Plug>AirlineSelectNextTab
 
-
-" Esc SETTINGS
-inoremap jk <Esc>
-inoremap jj <Esc>
-
-" /// Enable Netrw (default file browser)
 " filetype plugin on
 " let g:netwr_banner = 0
 " let g:netrw_liststyle = 3
@@ -231,63 +240,18 @@ hi VertSplit cterm=none
 
 
 
-" ---------------  lspconfig --------------------------------
-lua << EOF
-    local on_attach = function (client, bufnr)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
-        require('completion').on_attach(client)
-    end
-    require('lspconfig').vimls.setup({on_attach = on_attach})
-    require('lspconfig').tsserver.setup({on_attach = on_attach})
-    require('lspconfig').intelephense.setup({on_attach = on_attach})
-EOF
-
-
-" ---------------  deoplete --------------------------------
-let g:deoplete#enable_at_startup = 1
-
-
-
 " ---------------  winresizer --------------------------------
-" " let g:winresizer_gui:w
-"_enable = 1
-" let g:winrisizer_vert_resize=1
-" let g:winresizer_horiz_resize=1
-" " let g:winresizer_start_key = '<C-t>'
-" " If you want to cancel and quit window resize mode by `z` (keycode 122)
-" let g:winresizer_keycode_cancel = 122
-" " To expand your window size toward upper using upper arrow (instead of k)
-" let g:winresizer_keycode_up = "\<UP>"
-" " To expand your window size toward lower using down arrow (instead of j)
-" let g:winresizer_keycode_down = "\<DOWN>"
+" let g:winresizer_gui:w_enable = 1
+let g:winrisizer_vert_resize=1
+let g:winresizer_horiz_resize=1
+let g:winresizer_start_key = '<C-t>'
+" If you want to cancel and quit window resize mode by `z` (keycode 122)
+let g:winresizer_keycode_cancel = 122
+" To expand your window size toward upper using upper arrow (instead of k)
+let g:winresizer_keycode_up = "\<UP>"
+" To expand your window size toward lower using down arrow (instead of j)
+let g:winresizer_keycode_down = "\<DOWN>"
 
-
-
-" ---------------  coc settings --------------------------------
-" "function! s:show_documentation()
-" "  if (index(['vim','help'], &filetype) >= 0)
-" "    execute 'h '.expand('<cword>')
-" "  elseif (coc#rpc#ready())
-" "    call CocActionAsync('doHover')
-" "  else
-" "    execute '!' . &keywordprg . " " . expand('<cword>')
-" "  endif
-" "endfunction
-" "" Highlight the symbol and its references when holding the cursor.
-" "autocmd CursorHold * silent call CocActionAsync('highlight')
-" "augroup mygroup
-" "  autocmd!
-" "  " Setup formatexpr specified filetype(s).
-" "  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-" "  " Update signature help on jump placeholder.
-" "  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" "augroup end
-" "command! -nargs=0 Format :call CocAction('format')
-" "command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-" "command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-" "
 
 " ---------------  Indentline --------------------------------
 let g:indentLine_color_gui = "#555555"
@@ -303,9 +267,7 @@ autocmd FileType tex let g:indentLine_enabled=0
 
 
 
-
 " ---------------  Fern  --------------------------------
-
 " lambdalisue/fern.vim settings
 autocmd Filetype fern setlocal nonu norelativenumber
 function! s:init_fern() abort
@@ -324,13 +286,10 @@ let g:fern#renderer = "nerdfont"
 let g:fzf_layout = {'up':'~90%', 'window': { 'width': 0.8, 'height': 0.8,
                   \ 'yoffset':0.5,'xoffset': 0.5, 'highlight': 'Todo', 'border': 'sharp' } }
   
-nnoremap <C-n> :Fern . -reveal=% -drawer -toggle -width=40<CR>
-
-
+nnoremap <C-h> :Fern . -reveal=% -drawer -toggle -width=40<CR>
 
 
 " デフォルトのLeaderキー： " \ "  
-
 " ---------------  telescope --------------------------------
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
@@ -338,10 +297,52 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-" Using Lua functions
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+" ---------------   LSPのセッティング
+
+lua << EOF
+    local on_attach = function (client, bufnr)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
+        require('completion').on_attach(client)
+    end
+    require('lspconfig').vimls.setup({on_attach = on_attach})
+    require('lspconfig').tsserver.setup({on_attach = on_attach})
+    require('lspconfig').intelephense.setup({on_attach = on_attach})
 
 
+    -- インストールしたサーバーを起動させる
+    local lsp_installer = require("nvim-lsp-installer")
+    lsp_installer.on_server_ready(function(server)
+        local opts = {}
+        opts.capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+        -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
+        server:setup(opts)
+        vim.cmd [[ do User LspAttachBuffers ]]
+    end)
+
+    -- 補完機能の設定
+    vim.opt.completeopt = "menu,menuone,noselect"
+    local cmp = require"cmp"
+    cmp.setup({
+      snippet = {
+        expand = function(args)
+          vim.fn["vsnip#anonymous"](args.body)
+        end,
+      },
+      mapping = {
+        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-Space>"] = cmp.mapping.complete(),
+        ["<C-e>"] = cmp.mapping.close(),
+        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+      },
+      sources = cmp.config.sources({
+        { name = "nvim_lsp" },
+        { name = "vsnip" },
+      }, {
+        { name = "buffer" },
+      })
+    })
+EOF
