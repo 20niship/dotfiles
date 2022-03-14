@@ -24,6 +24,8 @@ autoload -Uz colors ; colors
 
 # エディタをvimに設定
 export EDITOR=vim
+# sudoeditコマンドでファイル編集するときのエディタを設定
+export SUDO_EDITOR=/home/anytech1/.myenv/nvim
 
 # Ctrl+Dでログアウトしてしまうことを防ぐ
 #setopt IGNOREEOF
