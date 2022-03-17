@@ -5,7 +5,13 @@ sudo apt upgrade
 
 sudo apt install -y git 
 sudo apt install -y gcc 
-sudo apt install -y build-essential 
+# sudo apt install -y build-essential 
+
+echo "---- install g++11 ------"
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo apt install -y g++-11
+
+
 sudo apt install -y doxygen 
 sudo apt install -y curl
 sudo apt install -y wget 
