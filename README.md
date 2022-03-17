@@ -48,4 +48,9 @@ chsh -s $(which zsh)
 `.bashrc`に`exec zsh`と書くことでも対応Ok
 
 
+## Tips
+- PythonのOpenCVを使おうとした時に、libGL.soが見つかりませんとか言われる
+  - `$ apt-get install libopencv-dev`
+
+
 
