@@ -1,3 +1,5 @@
+" colorscheme delek
+
 " https://note.com/histone/n/na8ebb8a5909f のプラグインより
 " フォントのインストールは --> mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
@@ -67,12 +69,6 @@ set statusline=2      " ステータスラインの記述
 inoremap jk <Esc>
 inoremap jj <Esc>
 
-" 閉じカッコの自動補間
-inoremap { {}<LEFT>
-inoremap [ []<LEFT>
-inoremap ( ()<LEFT>
-inoremap " ""<LEFT>
-inoremap ' ''<LEFT>
 
 tnoremap <Esc> <C-\><C-n> " terminalからESCで抜けられるようにする
 command! -nargs=* T split | wincmd j | resize 15 | terminal <args>
@@ -94,13 +90,16 @@ endif
 " Required:
 set runtimepath+=/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim
 
+packadd! matchit
+
 call dein#begin('/home/owner/.cache/dein')                          
   call dein#add('/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " VSCodeのようなカラースキームにする(カッコが見にくいので却下)
   call dein#add('tomasiser/vim-code-dark')
   call dein#add('Mofiqul/vscode.nvim')
-  " call dein#add('tomasr/molokai')
+  call dein#add('tomasr/molokai')
+  call dein#add('NLKNguyen/papercolor-theme')
   " call dein#add('joshdick/onedark.vim')
 
   " ファイル表示
@@ -111,6 +110,10 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('ryanoasis/vim-devicons')
 
+  " マルチカーソル 
+  call dein#add('~/.cache/dein.vim')
+
+  " LSP関連
   call dein#add('neovim/nvim-lspconfig')
   call dein#add('williamboman/nvim-lsp-installer')
   call dein#add('hrsh7th/cmp-nvim-lsp')
@@ -120,9 +123,16 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('hrsh7th/nvim-cmp')
   call dein#add('hrsh7th/cmp-vsnip')
   call dein#add('hrsh7th/vim-vsnip')
+  call dein#add('prabirshrestha/vim-lsp')
+  call dein#add('mattn/vim-lsp-settings')
+
+  " LSPのエラーを一覧表示
+  call dein#add('kyazdani42/nvim-web-devicons')
+  call dein#add('folke/trouble.nvim')
 
   " Windowのリサイズをやりやすくする
-  call dein#add('simeji/winresizer')
+  " マウスでリサイズできるので削除
+  " call dein#add('simeji/winresizer')
 
   " コメントアウト
   call dein#add('tpope/vim-commentary')
@@ -153,22 +163,41 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('lambdalisue/fern-hijack.vim')
 
   " jupyter notebookを使えるようにする
-  call dein#add('goerz/jupytext.vim')
+  " call dein#add('goerz/jupytext.vim')
+  
+  " ファイルの関数一覧などを左右に表示
+  call dein#add('majutsushi/tagbar')
+
+  " HTMLの閉じタグを自動で生成する
+  call dein#add('alvan/vim-closetag')
+
+  " Formatter
+  " call dein#add('mhartington/formatter.nvim')
+  
+  " notification
+  call dein#add('rcarriga/nvim-notify')
+  
+  " 閉じカッコの自動補間
+  call dein#add('cohama/lexima.vim')
+
+  " clang-formatを使えるように
+  call dein#add('rhysd/vim-clang-format')
 call dein#end()
 
 filetype plugin indent on         
 
+set termguicolors 
 " If you want to install not installed plugins on startup.          
 "if dein#check_install()          
 "  call dein#install()            
 "endif                            
 
 
-
 " ################# 各種プラグインの設定 #################
 " colorscheme onedark
 " colorscheme molokai 
-colorscheme codedark 
+" colorscheme codedark 
+colorscheme PaperColor
 
 " --------------- Nerd Tree --------------------------------
 " nmap <C-n> :NERDTreeToggle<CR>
@@ -226,6 +255,15 @@ let g:airline_theme = 'codedark'
 nmap <C-p> <Plug>AirlineSelectPrebTab
 nmap <C-n> <Plug>AirlineSelectNextTab
 
+" tagbarの使用
+let g:tagbar_width = 30        " 初期設定はwidth=40なのでちょっと幅とりすぎ。
+let g:tagbar_autoshowtag = 1   " :TagbarShowTag を叩かなくても有効にする
+nmap <F8> :TagbarToggle<CR> 
+
+
+" 閉じタグを自動で生成するファイル
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
+
 " filetype plugin on
 " let g:netwr_banner = 0
 " let g:netrw_liststyle = 3
@@ -242,15 +280,15 @@ hi VertSplit cterm=none
 
 " ---------------  winresizer --------------------------------
 " let g:winresizer_gui:w_enable = 1
-let g:winrisizer_vert_resize=1
-let g:winresizer_horiz_resize=1
-let g:winresizer_start_key = '<C-t>'
-" If you want to cancel and quit window resize mode by `z` (keycode 122)
-let g:winresizer_keycode_cancel = 122
-" To expand your window size toward upper using upper arrow (instead of k)
-let g:winresizer_keycode_up = "\<UP>"
-" To expand your window size toward lower using down arrow (instead of j)
-let g:winresizer_keycode_down = "\<DOWN>"
+" let g:winrisizer_vert_resize=1
+" let g:winresizer_horiz_resize=1
+" let g:winresizer_start_key = '<C-t>'
+" " If you want to cancel and quit window resize mode by `z` (keycode 122)
+" let g:winresizer_keycode_cancel = 122
+" " To expand your window size toward upper using upper arrow (instead of k)
+" let g:winresizer_keycode_up = "\<UP>"
+" " To expand your window size toward lower using down arrow (instead of j)
+" let g:winresizer_keycode_down = "\<DOWN>"
 
 
 " ---------------  Indentline --------------------------------
@@ -298,6 +336,60 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 
+" trouble.nvim
+nnoremap <leader>xx <cmd>TroubleToggle<cr>
+nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
+nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
+nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
+nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+
+
+" Provided by setup function
+" nnoremap <silent> <leader>f :Format<CR>
+
+
+" notification hilights
+highlight NotifyERRORBorder guifg=#8A1F1F
+highlight NotifyWARNBorder guifg=#79491D
+highlight NotifyINFOBorder guifg=#4F6752
+highlight NotifyDEBUGBorder guifg=#8B8B8B
+highlight NotifyTRACEBorder guifg=#4F3552
+highlight NotifyERRORIcon guifg=#F70067
+highlight NotifyWARNIcon guifg=#F79000
+highlight NotifyINFOIcon guifg=#A9FF68
+highlight NotifyDEBUGIcon guifg=#8B8B8B
+highlight NotifyTRACEIcon guifg=#D484FF
+highlight NotifyERRORTitle  guifg=#F70067
+highlight NotifyWARNTitle guifg=#F79000
+highlight NotifyINFOTitle guifg=#A9FF68
+highlight NotifyDEBUGTitle  guifg=#8B8B8B
+highlight NotifyTRACETitle  guifg=#D484FF
+highlight link NotifyERRORBody Normal
+highlight link NotifyWARNBody Normal
+highlight link NotifyINFOBody Normal
+highlight link NotifyDEBUGBody Normal
+highlight link NotifyTRACEBody Normal
+
+
+" ---------------   clang-format   -----------------
+
+let g:clang_format#style_options = {
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces" : "Stroustrup"}
+
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" if you install vim-operator-user
+autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+
 " ---------------   LSPのセッティング
 
 lua << EOF
@@ -305,17 +397,23 @@ lua << EOF
         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
-        require('completion').on_attach(client)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap=true,silent=true})
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {noremap=true,silent=true})
     end
-    require('lspconfig').vimls.setup({on_attach = on_attach})
-    require('lspconfig').tsserver.setup({on_attach = on_attach})
-    require('lspconfig').intelephense.setup({on_attach = on_attach})
-
-
+    -- require('lspconfig').vimls.setup({on_attach = on_attach})
+    -- require('lspconfig').tsserver.setup({on_attach = on_attach})
+    -- require('lspconfig').intelephense.setup({on_attach = on_attach})
     -- インストールしたサーバーを起動させる
     local lsp_installer = require("nvim-lsp-installer")
     lsp_installer.on_server_ready(function(server)
-        local opts = {}
+        local opts = {on_attach = on_attach}
         opts.capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
         -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
         server:setup(opts)
@@ -324,7 +422,7 @@ lua << EOF
 
     -- 補完機能の設定
     vim.opt.completeopt = "menu,menuone,noselect"
-    local cmp = require"cmp"
+    local cmp = require("cmp")
     cmp.setup({
       snippet = {
         expand = function(args)
@@ -345,4 +443,80 @@ lua << EOF
         { name = "buffer" },
       })
     })
+  
+   -- LSPのエラー一覧表示（trouble.nvim)
+  require("trouble").setup{
+    position = "bottom", -- position of the list can be: bottom, top, left, right
+    height = 10, -- height of the trouble list when position is top or bottom
+    width = 50, -- width of the list when position is left or right
+    icons = true, -- use devicons for filenames
+    mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+    fold_open = "", -- icon used for open folds
+    fold_closed = "", -- icon used for closed folds
+    group = true, -- group results by file
+    padding = true, -- add an extra new line on top of the list
+    action_keys = { -- key mappings for actions in the trouble list
+        -- map to {} to remove a mapping, for example:
+        -- close = {},
+        close = "q", -- close the list
+        cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
+        refresh = "r", -- manually refresh
+        jump = {"<cr>", "<tab>"}, -- jump to the diagnostic or open / close folds
+        open_split = { "<c-x>" }, -- open buffer in new split
+        open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+        open_tab = { "<c-t>" }, -- open buffer in new tab
+        jump_close = {"o"}, -- jump to the diagnostic and close the list
+        toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+        toggle_preview = "P", -- toggle auto_preview
+        hover = "K", -- opens a small popup with the full multiline message
+        preview = "p", -- preview the diagnostic location
+        close_folds = {"zM", "zm"}, -- close all folds
+        open_folds = {"zR", "zr"}, -- open all folds
+        toggle_fold = {"zA", "za"}, -- toggle fold of current file
+        previous = "k", -- preview item
+        next = "j" -- next item
+    },
+    indent_lines = true, -- add an indent guide below the fold icons
+    auto_open = false, -- automatically open the list when you have diagnostics
+    auto_close = false, -- automatically close the list when you have no diagnostics
+    auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+    auto_fold = false, -- automatically fold a file trouble list at creation
+    auto_jump = {"lsp_definitions"}, -- for the given modes, automatically jump if there is only a single result
+    signs = {
+        -- icons / text used for a diagnostic
+        error = "",
+        warning = "",
+        hint = "",
+        information = "",
+        other = "﫠"
+    },
+    use_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
+}
+
+
+--  vim-notify : notification
+vim.notify =require("notify");
+vim.notify.setup({
+--   -- Animation style (see below for details)
+  stages = "slide",
+  -- Function called when a new window is opened, use for changing win settings/config
+  on_open = nil,
+  -- Function called when a window is closed
+  on_close = nil,
+  -- Render function for notifications. See notify-render()
+  render = "default",
+  -- Default timeout for notifications
+  timeout = 2000,
+  -- Max number of columns for messages
+  max_width = nil,
+  -- Max number of lines for a message
+  max_height = nil,
+  -- For stages that change opacity this is treated as the highlight behind the window
+  -- Set this to either a highlight group, an RGB hex value e.g. "#000000" or a function returning an RGB code for dynamic values
+  background_colour = "Normal",
+  -- Minimum width for notification windows
+  minimum_width = 50,
+  -- Icons for the different levels
+  icons = {ERROR = "", WARN = "", INFO = "", DEBUG = "",TRACE = "✎" },
+})
 EOF
