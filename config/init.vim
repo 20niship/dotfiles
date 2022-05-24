@@ -92,9 +92,9 @@ set runtimepath+=/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim
 
 packadd! matchit
 
-call dein#begin('/home/owner/.cache/dein')                          
-  call dein#add('/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim')
-
+call dein#begin('~/.cache/dein')                          
+  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
+  
   " VSCodeのようなカラースキームにする(カッコが見にくいので却下)
   call dein#add('tomasiser/vim-code-dark')
   call dein#add('Mofiqul/vscode.nvim')
@@ -109,9 +109,6 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('vim-airline/vim-airline')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('ryanoasis/vim-devicons')
-
-  " マルチカーソル 
-  call dein#add('~/.cache/dein.vim')
 
   " LSP関連
   call dein#add('neovim/nvim-lspconfig')
@@ -138,7 +135,7 @@ call dein#begin('/home/owner/.cache/dein')
   call dein#add('tpope/vim-commentary')
 
   " gitいろいろ 
-  " call dein#add('airblade/vim-gitgutter')
+  call dein#add('airblade/vim-gitgutter')
 
   " インデントに薄く縦線をつける
   call dein#add('Yggdroot/indentLine')
@@ -182,6 +179,11 @@ call dein#begin('/home/owner/.cache/dein')
 
   " clang-formatを使えるように
   call dein#add('rhysd/vim-clang-format')
+
+  " snippet
+  call dein#add('SirVer/ultisnips')
+  call dein#add('honza/vim-snippets')
+  call dein#add('quangnguyen30192/cmp-nvim-ultisnips')
 call dein#end()
 
 filetype plugin indent on         
@@ -328,12 +330,15 @@ nnoremap <C-h> :Fern . -reveal=% -drawer -toggle -width=40<CR>
 
 
 " デフォルトのLeaderキー： " \ "  
+" spaceに変更
+let mapleader = "\<space>"
+
 " ---------------  telescope --------------------------------
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fl <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fg <cmd>Telescope git_files<cr>
 
 
 " trouble.nvim
@@ -389,6 +394,13 @@ autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 " Toggle auto formatting:
 nmap <Leader>C :ClangFormatAutoToggle<CR>
 
+let g:python3_host_prog = "/usr/bin/python3" 
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsEditSplit="vertical"
+
+
 
 " ---------------   LSPのセッティング
 
@@ -427,6 +439,7 @@ lua << EOF
       snippet = {
         expand = function(args)
           vim.fn["vsnip#anonymous"](args.body)
+          vim.fn["UltiSnips#Anon"](args.body) 
         end,
       },
       mapping = {
@@ -438,7 +451,7 @@ lua << EOF
       },
       sources = cmp.config.sources({
         { name = "nvim_lsp" },
-        { name = "vsnip" },
+        { name = "ultisnips" },
       }, {
         { name = "buffer" },
       })
