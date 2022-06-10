@@ -13,8 +13,6 @@ set number "行頭に数字を表示する
 set cursorline        "current lineをマークアップ           
 set hls               "検索文字のハイライト　               
 set expandtab         "タブ入力を空白に置き換える         
-set tabstop   =2      "タブ幅                        
-set shiftwidth=2      "自動インデント幅                     
 set smartindent       "改行時に入力された行末に合わせて、次の行のインデントを調整する    
 set linebreak         "word wrapping                                                     
 set clipboard=unnamed "nvimのyankとmacのクリップボードを共有する
@@ -24,6 +22,7 @@ set vb t_vb= "ベルをオフにするこれを使用すると、いちいちビ
 "インデント関係
 set expandtab "空白をタブとして認識しないようにする
 set tabstop=2 "一個のタブを空白何個分にとるか
+set shiftwidth=2      "自動インデント幅                     
 set softtabstop=2 "tabを押した時に空白何個分のインデントをとるか決めます。
 set autoindent "改行したりした時にインデントを保持してくれます。
 
@@ -92,15 +91,17 @@ set runtimepath+=/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim
 
 packadd! matchit
 
-call dein#begin('~/.cache/dein')                          
-  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
-  
-  " VSCodeのようなカラースキームにする(カッコが見にくいので却下)
-  call dein#add('tomasiser/vim-code-dark')
-  call dein#add('Mofiqul/vscode.nvim')
-  call dein#add('tomasr/molokai')
-  call dein#add('NLKNguyen/papercolor-theme')
+call dein#begin('/home/owner/.cache/dein')                          
+  call dein#add('/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim')
+
+  " COlorschemes 
+  " call dein#add('tomasiser/vim-code-dark')
+  " call dein#add('Mofiqul/vscode.nvim')
+  " call dein#add('tomasr/molokai')
+  " call dein#add('NLKNguyen/papercolor-theme')
   " call dein#add('joshdick/onedark.vim')
+  " call dein#add("EdenEast/nightfox.nvim")
+  call dein#add("bluz71/vim-moonfly-colors")
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
@@ -126,10 +127,6 @@ call dein#begin('~/.cache/dein')
   " LSPのエラーを一覧表示
   call dein#add('kyazdani42/nvim-web-devicons')
   call dein#add('folke/trouble.nvim')
-
-  " Windowのリサイズをやりやすくする
-  " マウスでリサイズできるので削除
-  " call dein#add('simeji/winresizer')
 
   " コメントアウト
   call dein#add('tpope/vim-commentary')
@@ -185,21 +182,12 @@ call dein#begin('~/.cache/dein')
   call dein#add('honza/vim-snippets')
   call dein#add('quangnguyen30192/cmp-nvim-ultisnips')
 call dein#end()
-
 filetype plugin indent on         
 
 set termguicolors 
-" If you want to install not installed plugins on startup.          
-"if dein#check_install()          
-"  call dein#install()            
-"endif                            
-
 
 " ################# 各種プラグインの設定 #################
-" colorscheme onedark
-" colorscheme molokai 
-" colorscheme codedark 
-colorscheme PaperColor
+colorscheme moonfly 
 
 " --------------- Nerd Tree --------------------------------
 " nmap <C-n> :NERDTreeToggle<CR>
@@ -250,7 +238,7 @@ let g:airline_right_alt_sep = ''
 let g:airline_right_sep = ''
 let g:airline_stl_path_style = 'short'
 " let g:airline_theme = 'onedark'
-let g:airline_theme = 'codedark'
+let g:airline_theme = 'moonfly'
 " let g:airline_theme = 'molokai'
 
 " タブの切り替え
@@ -278,21 +266,6 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
 "/// SPLIT BORDER SETTINGS
 hi VertSplit cterm=none
 
-
-
-" ---------------  winresizer --------------------------------
-" let g:winresizer_gui:w_enable = 1
-" let g:winrisizer_vert_resize=1
-" let g:winresizer_horiz_resize=1
-" let g:winresizer_start_key = '<C-t>'
-" " If you want to cancel and quit window resize mode by `z` (keycode 122)
-" let g:winresizer_keycode_cancel = 122
-" " To expand your window size toward upper using upper arrow (instead of k)
-" let g:winresizer_keycode_up = "\<UP>"
-" " To expand your window size toward lower using down arrow (instead of j)
-" let g:winresizer_keycode_down = "\<DOWN>"
-
-
 " ---------------  Indentline --------------------------------
 let g:indentLine_color_gui = "#555555"
 autocmd FileType tex let g:indentLine_color_gui = "#dddddd"
@@ -304,8 +277,6 @@ let g:indentLine_concealcursor=""
 set conceallevel=1
 set concealcursor-=incv
 autocmd FileType tex let g:indentLine_enabled=0
-
-
 
 " ---------------  Fern  --------------------------------
 " lambdalisue/fern.vim settings
@@ -438,16 +409,19 @@ lua << EOF
     cmp.setup({
       snippet = {
         expand = function(args)
-          vim.fn["vsnip#anonymous"](args.body)
+          -- vim.fn["vsnip#anonymous"](args.body)
           vim.fn["UltiSnips#Anon"](args.body) 
         end,
       },
       mapping = {
-        ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),
+        ["<C-j>"] = cmp.mapping.scroll_docs(-4),
+        ["<C-k>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.close(),
         ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ['<Left>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
+        ['<Right>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+        ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
       },
       sources = cmp.config.sources({
         { name = "nvim_lsp" },
