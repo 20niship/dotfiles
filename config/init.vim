@@ -87,12 +87,12 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
 
 packadd! matchit
 
-call dein#begin('/home/owner/.cache/dein')                          
-  call dein#add('/home/owner/.cache/dein/repos/github.com/Shougo/dein.vim')
+call dein#begin('~/.cache/dein')                          
+  call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
 
   " COlorschemes 
   " call dein#add('tomasiser/vim-code-dark')
