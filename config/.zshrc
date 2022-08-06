@@ -237,7 +237,10 @@ alias ll='ls -l --color=auto'
 alias df="df -Th"
 alias su="su -l"
 alias so='source'
-alias vi='vim'
+alias vi='nvim'
+alias v='nvim'
+alias vim='nvim'
+
 # alias vz='vim ~/.zshrc'
 alias c='cdr'
 # alias cp='cp -i'
@@ -312,6 +315,9 @@ source ~/.zplug/init.zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
+
 # zplug "b4b4r07/enhancd", use:init.sh
 #zplug "junegunn/fzf-bin", as:command, from:gh-r, file:fzf
 
@@ -399,7 +405,6 @@ done;
 
 
 
-zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
