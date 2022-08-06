@@ -315,11 +315,8 @@ source ~/.zplug/init.zsh
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
 zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
-
-# zplug "b4b4r07/enhancd", use:init.sh
-#zplug "junegunn/fzf-bin", as:command, from:gh-r, file:fzf
+zplug "junegunn/fzf", from:gh-r, as:command, rename-to:fzf
 
 # インストールしていないプラグインをインストール
 if ! zplug check --verbose; then
@@ -332,7 +329,7 @@ fi
 # コマンドをリンクして、PATH に追加し、プラグインは読み込む
 # zplug load --verbose
 zplug load
-
+# if failed, re-install by `zplug install`
 
 # -----------------------------
 # PATH
@@ -388,7 +385,7 @@ function gs() {
 fd() {
   local dir
   # dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
-  dir=$(find ~/デスクトップ -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
+  dir=$(find ~/Desktop -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
 
