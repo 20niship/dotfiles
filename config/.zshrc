@@ -359,14 +359,12 @@ fi
 # Git
 # -----------------------------
 function gt() {
-  is_in_git_repo || return
   git tag --sort -version:refname |
   fzf-down --multi --preview-window right:70% \
     --preview 'git show --color=always {} | head -200'
 }
 
 function gr() {
-  is_in_git_repo || return
   git remote -v | awk '{print $1 "\t" $2}' | uniq |
   fzf-down --tac \
     --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
@@ -374,7 +372,6 @@ function gr() {
 }
 
 function gs() {
-  is_in_git_repo || return
   git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
   cut -d: -f1
 }
@@ -388,6 +385,18 @@ fd() {
   dir=$(find ~/デスクトップ -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
+
+
+# makeを自動で実行するコマンド
+# sudo apt install inotifywait-tools がいる
+# buildディレクトリに行って、mを打つ
+function m(){
+  inotifywait -e create,delete,modify,move -mr ../  --exclude ../build |while read;do while read -t 0.3;
+do :;done;
+  make -j4;
+done;
+}
+
 
 
 zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
