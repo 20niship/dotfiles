@@ -181,6 +181,9 @@ call dein#begin('~/.cache/dein')
   call dein#add('SirVer/ultisnips')
   call dein#add('honza/vim-snippets')
   call dein#add('quangnguyen30192/cmp-nvim-ultisnips')
+  
+  " glsl shader 
+  call dein#add('tikhomirov/vim-glsl')
 call dein#end()
 filetype plugin indent on         
 
@@ -371,7 +374,8 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
-
+" GLSLファイルのカラーリング https://github.com/tikhomirov/vim-glsl
+autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 " ---------------   LSPのセッティング
 
