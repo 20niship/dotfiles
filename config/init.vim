@@ -41,7 +41,18 @@ set whichwrap=b,s,h,l,<,>,[,] "行末、行頭で行を跨ぐことができる�
 set scrolloff=5 " SCROLL
 set autoread " 更新時自動再読込み
 set hidden " 編集中でも他のファイルを開けるようにする
-set noswapfile " スワップファイルを作らない
+
+
+" Swap and backup files 
+" set backup    "バックアップファイルを生成する
+set nobackup  "バックアップファイルを生成しない（デフォルト）
+set backupdir=.,~/tmp,~/    "デフォルトの設定（カレントディレクトリに作られる）
+
+set swapfile    "スワップファイルを生成する（デフォルト）
+" set noswapfile  "スワップファイルを生成しない
+set directory=.    "デフォルトの設定（カレントディレクトリに作成）
+set updatetime=30000  "30秒ごとにswapファイルを保存
+set updatecount=500   "500文字タイプするごとに保存
 
 
 " matchpairs
