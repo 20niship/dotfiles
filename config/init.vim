@@ -1,5 +1,3 @@
-" colorscheme delek
-
 " https://note.com/histone/n/na8ebb8a5909f のプラグインより
 " フォントのインストールは --> mkdir -p ~/.local/share/fonts; cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
@@ -41,7 +39,6 @@ set whichwrap=b,s,h,l,<,>,[,] "行末、行頭で行を跨ぐことができる�
 set scrolloff=5 " SCROLL
 set autoread " 更新時自動再読込み
 set hidden " 編集中でも他のファイルを開けるようにする
-
 
 " Swap and backup files 
 " set backup    "バックアップファイルを生成する
@@ -112,7 +109,8 @@ call dein#begin('~/.cache/dein')
   " call dein#add('NLKNguyen/papercolor-theme')
   " call dein#add('joshdick/onedark.vim')
   " call dein#add("EdenEast/nightfox.nvim")
-  call dein#add("bluz71/vim-moonfly-colors")
+  " call dein#add("bluz71/vim-moonfly-colors")
+  call dein#add('Everblush/everblush.vim')
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
@@ -192,39 +190,26 @@ call dein#begin('~/.cache/dein')
   call dein#add('SirVer/ultisnips')
   call dein#add('honza/vim-snippets')
   call dein#add('quangnguyen30192/cmp-nvim-ultisnips')
-  
-  " glsl shader 
+
+  " glsl shader
   call dein#add('tikhomirov/vim-glsl')
+
+  call dein#add('tpope/vim-surround')
+
+  " React用のシンタックスハイライト
+  call dein#add ('pangloss/vim-javascript')
+  call dein#add ('mxw/vim-jsx')
+
+
+
 call dein#end()
 filetype plugin indent on         
 
 set termguicolors 
 
 " ################# 各種プラグインの設定 #################
-colorscheme moonfly 
-
-" --------------- Nerd Tree --------------------------------
-" nmap <C-n> :NERDTreeToggle<CR>
-" let g:NERDTreeWinSize=30 " 表示幅
-" let g:NERDTreeShowBookmarks=1 " ブックマークを表示
-" let g:NERDTreeMapUpdir='<C-u>'  " 親ディレクトリへ移動
-" let g:NERDTreeMapOpenSplit='<C-b>' " ファイルの開き方
-" let g:NERDTreeMapOpenVSplit='<C-l>' 
-" let g:NERDTreeQuitOnOpen=1 " ファイルを開いたらNERDTreeを閉じる
-" let g:NERDTreeShowHidden=1 " 隠しファイルを表示
-" let g:NERDTreeIgnore=['\.git$', '\.clean$', '\.swp$', '\.bak$', '\~$'] " 非表示ファイル
-" 
-" augroup vimrc_nerdtree 
-"   autocmd!
-"   " 他のバッファをすべて閉じた時にNERDTreeが開いていたらNERDTreeも一緒に閉じる。
-"   autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
-"   " Tree内では5ずつ移動する
-"   autocmd FileType nerdtree nnoremap 5j
-"   autocmd FileType nerdtree nnoremap 5k
-" augroup END
-
-" let NERDTreeMapOpenInTab='<ENTER>' " Enterキーで新しいタブで開く
-
+" colorscheme moonfly 
+colorscheme everblush 
 
 " ---------------  airline --------------------------------
 " Airline SETTINGS
@@ -256,7 +241,7 @@ let g:airline_theme = 'moonfly'
 " let g:airline_theme = 'molokai'
 
 " タブの切り替え
-nmap <C-p> <Plug>AirlineSelectPrebTab
+nmap <C-p> <Plug>AirlineSelectPrevTab
 nmap <C-n> <Plug>AirlineSelectNextTab
 
 " tagbarの使用
@@ -327,12 +312,9 @@ nnoremap <leader>fg <cmd>Telescope git_files<cr>
 
 
 " trouble.nvim
-nnoremap <leader>xx <cmd>TroubleToggle<cr>
-nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
-nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
-nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
-nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
-nnoremap gR <cmd>TroubleToggle lsp_references<cr>
+nnoremap <F2> <cmd>TroubleToggle<cr>
+nnoremap <F5> <cmd>TroubleToggle<cr>
+nnoremap <F3> <cmd>TroubleToggle workspace_diagnostics<cr>
 
 
 " Provided by setup function
@@ -385,7 +367,6 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
-" GLSLファイルのカラーリング https://github.com/tikhomirov/vim-glsl
 autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 " ---------------   LSPのセッティング
@@ -435,6 +416,7 @@ lua << EOF
         ["<C-e>"] = cmp.mapping.close(),
         ["<CR>"] = cmp.mapping.confirm({ select = true }),
         ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 'c' }),
+        ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 'c' }),
       },
       sources = cmp.config.sources({
         { name = "nvim_lsp" },
@@ -520,3 +502,5 @@ vim.notify.setup({
   icons = {ERROR = "", WARN = "", INFO = "", DEBUG = "",TRACE = "✎" },
 })
 EOF
+
+
