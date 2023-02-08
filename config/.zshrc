@@ -1,4 +1,3 @@
-
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh dir vcs newline virtualenv status)
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -7,7 +6,6 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh dir vcs newline virtualenv status)
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
 
 
 # ----------------------------
@@ -23,9 +21,9 @@ fi
 autoload -Uz colors ; colors
 
 # エディタをvimに設定
-export EDITOR=vim
+export EDITOR=nvim
 # sudoeditコマンドでファイル編集するときのエディタを設定
-export SUDO_EDITOR=/home/anytech1/.myenv/nvim
+export SUDO_EDITOR=nvim
 
 # Ctrl+Dでログアウトしてしまうことを防ぐ
 #setopt IGNOREEOF
@@ -194,7 +192,6 @@ setopt share_history
 setopt hist_ignore_all_dups
 
 # historyに日付を表示
-alias h='fc -lt '%F %T' 1'
 
 # ヒストリに保存するときに余分なスペースを削除する
 setopt hist_reduce_blanks
@@ -232,6 +229,7 @@ setopt inc_append_history
 alias lst='ls -ltr --color=auto'
 alias ls='ls --color=auto'
 alias la='ls -la --color=auto'
+alias l='ls --color=auto'
 alias ll='ls -l --color=auto'
 
 alias df="df -Th"
@@ -242,13 +240,11 @@ alias v='nvim'
 alias vim='nvim'
 
 # alias vz='vim ~/.zshrc'
-alias c='cdr'
 # alias cp='cp -i'
 # alias rm='rm -i'
 alias mkdir='mkdir -p'
 alias ..='cd ../'
 alias back='pushd'
-alias diff='diff -U1'
 alias py='python3'
 
 # alias tma='tmux attach'
@@ -259,7 +255,16 @@ alias dex="docker exec -i -t"
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 
 alias c="clear"
+alias n='ninja'
 alias sgl='git log --graph --oneline --branches --decorate=full -20 --date=short --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"'
+
+alias h='fc -lt '%F %T' 1'
+
+if [[ -x `which colordiff` ]]; then
+  alias diff='colordiff -u'
+else
+  alias diff='diff -u'
+fi
 
 
 # -----------------------------
@@ -316,7 +321,7 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme, from:github, as:theme
-zplug "junegunn/fzf", from:gh-r, as:command, rename-to:fzf
+# zplug "junegunn/fzf", from:gh-r, as:command, rename-to:fzf
 
 # インストールしていないプラグインをインストール
 if ! zplug check --verbose; then
