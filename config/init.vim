@@ -73,7 +73,7 @@ set showtabline=2
 set statusline=2      " ステータスラインの記述
 
 " Esc SETTINGS
-inoremap jk <Esc>
+" inoremap jk <Esc>
 inoremap jj <Esc>
 
 
@@ -94,7 +94,7 @@ if &compatible
   set nocompatible               " Be iMproved                      
 endif
 
-" Required: https://github.com/Shougo/dein.vim
+" --------  dein ----------
 
 let $CACHE = expand('~/.cache')
 if !isdirectory($CACHE)
@@ -123,10 +123,10 @@ call dein#begin('~/.cache/dein')
   " call dein#add('tomasiser/vim-code-dark')
   " call dein#add('Mofiqul/vscode.nvim')
   " call dein#add('tomasr/molokai')
-  " call dein#add('NLKNguyen/papercolor-theme')
-  " call dein#add('joshdick/onedark.vim')
-  " call dein#add("EdenEast/nightfox.nvim")
-  " call dein#add("bluz71/vim-moonfly-colors")
+  call dein#add('NLKNguyen/papercolor-theme')
+  call dein#add('joshdick/onedark.vim')
+  call dein#add("EdenEast/nightfox.nvim")
+  call dein#add("bluz71/vim-moonfly-colors")
   call dein#add('Everblush/everblush.vim')
 
   " ファイル表示
@@ -139,7 +139,8 @@ call dein#begin('~/.cache/dein')
 
   " LSP関連
   call dein#add('neovim/nvim-lspconfig')
-  call dein#add('williamboman/nvim-lsp-installer')
+  call dein#add('williamboman/mason.nvim')
+  call dein#add('williamboman/mason-lspconfig.nvim')
   call dein#add('hrsh7th/cmp-nvim-lsp')
   call dein#add('hrsh7th/cmp-buffer')
   call dein#add('hrsh7th/cmp-path')
@@ -147,8 +148,6 @@ call dein#begin('~/.cache/dein')
   call dein#add('hrsh7th/nvim-cmp')
   call dein#add('hrsh7th/cmp-vsnip')
   call dein#add('hrsh7th/vim-vsnip')
-  call dein#add('prabirshrestha/vim-lsp')
-  call dein#add('mattn/vim-lsp-settings')
 
   " LSPのエラーを一覧表示
   call dein#add('kyazdani42/nvim-web-devicons')
@@ -217,8 +216,7 @@ call dein#begin('~/.cache/dein')
   call dein#add ('pangloss/vim-javascript')
   call dein#add ('mxw/vim-jsx')
 
-
-
+  call dein#add ('pantharshit00/vim-prisma')
 call dein#end()
 filetype plugin indent on         
 
@@ -229,7 +227,6 @@ set termguicolors
 colorscheme everblush 
 
 " ---------------  airline --------------------------------
-" Airline SETTINGS
 let g:airline_powerline_fonts = 1
 " let g:airline#extensions#bufferline#enabled = 1
 " let g:airline#extensions#denite#enabled = 1
@@ -263,7 +260,6 @@ nmap <C-n> <Plug>AirlineSelectNextTab
 let g:tagbar_width = 30        " 初期設定はwidth=40なのでちょっと幅とりすぎ。
 let g:tagbar_autoshowtag = 1   " :TagbarShowTag を叩かなくても有効にする
 nmap <F8> :TagbarToggle<CR> 
-
 
 " 閉じタグを自動で生成するファイル
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
@@ -360,21 +356,25 @@ highlight link NotifyTRACEBody Normal
 
 
 " ---------------   clang-format   -----------------
-
-let g:clang_format#style_options = {
-            \ "AccessModifierOffset" : -4,
-            \ "AllowShortIfStatementsOnASingleLine" : "true",
-            \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "Standard" : "C++11",
-            \ "BreakBeforeBraces" : "Stroustrup"}
-
+" let g:clang_format#style_options = {
+"             \ "AccessModifierOffset" : -4,
+"             \ "AllowShortIfStatementsOnASingleLine" : "true",
+"             \ "AlwaysBreakTemplateDeclarations" : "true",
+"             \ "Standard" : "C++11",
+"             \ "BreakBeforeBraces" : "Stroustrup"}
 " map to <Leader>cf in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+" autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 " if you install vim-operator-user
-autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+" autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 " Toggle auto formatting:
-nmap <Leader>C :ClangFormatAutoToggle<CR>
+" nmap <Leader>C :ClangFormatAutoToggle<CR>
+
+" let g:lsp_settings = {
+" \  'clangd': {'cmd': ['clangd-14.0']},
+" \  'efm-langserver': {'disabled': v:false}
+" \}
+
 
 let g:python3_host_prog = "/usr/bin/python3" 
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -399,20 +399,25 @@ lua << EOF
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap=true,silent=true})
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap=true,silent=true})
         vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {noremap=true,silent=true})
+        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {noremap=true,silent=true})
+        vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
     end
-    -- require('lspconfig').vimls.setup({on_attach = on_attach})
-    -- require('lspconfig').tsserver.setup({on_attach = on_attach})
-    -- require('lspconfig').intelephense.setup({on_attach = on_attach})
     -- インストールしたサーバーを起動させる
-    local lsp_installer = require("nvim-lsp-installer")
-    lsp_installer.on_server_ready(function(server)
-        local opts = {on_attach = on_attach}
-        opts.capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-        -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-        server:setup(opts)
-        vim.cmd [[ do User LspAttachBuffers ]]
-    end)
+   require("mason").setup()
+   local nvim_lsp = require('lspconfig')
+   local mason_lspconfig = require('mason-lspconfig')
+   mason_lspconfig.setup_handlers({ function(server_name)
+     local opts = {}
+     opts.on_attach = function(_, bufnr)
+       local bufopts = { silent = true, buffer = bufnr }
+       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+       vim.keymap.set('n', 'gd', vim.lsp.buf.type_definition, bufopts)
+       vim.keymap.set('n', 'grf', vim.lsp.buf.references, bufopts)
+       vim.keymap.set('n', '<space>f', vim.lsp.buf.format, bufopts)
+      end
+       nvim_lsp[server_name].setup(opts)
+     end 
+   })
 
     -- 補完機能の設定
     vim.opt.completeopt = "menu,menuone,noselect"
@@ -503,7 +508,7 @@ vim.notify.setup({
   -- Render function for notifications. See notify-render()
   render = "default",
   -- Default timeout for notifications
-  timeout = 2000,
+  timeout = 1700,
   -- Max number of columns for messages
   max_width = nil,
   -- Max number of lines for a message
@@ -517,5 +522,6 @@ vim.notify.setup({
   icons = {ERROR = "", WARN = "", INFO = "", DEBUG = "",TRACE = "✎" },
 })
 EOF
+
 
 
