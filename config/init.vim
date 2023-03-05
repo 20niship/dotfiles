@@ -387,37 +387,35 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 " ---------------   LSPのセッティング
 
 lua << EOF
-    local on_attach = function (client, bufnr)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap=true,silent=true})
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap=true,silent=true})
-        -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {noremap=true,silent=true})
-        vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-    end
-    -- インストールしたサーバーを起動させる
    require("mason").setup()
+
    local nvim_lsp = require('lspconfig')
    local mason_lspconfig = require('mason-lspconfig')
    mason_lspconfig.setup_handlers({ function(server_name)
-     local opts = {}
-     opts.on_attach = function(_, bufnr)
-       local bufopts = { silent = true, buffer = bufnr }
-       vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-       vim.keymap.set('n', 'gd', vim.lsp.buf.type_definition, bufopts)
-       vim.keymap.set('n', 'grf', vim.lsp.buf.references, bufopts)
-       vim.keymap.set('n', '<space>f', vim.lsp.buf.format, bufopts)
-      end
-       nvim_lsp[server_name].setup(opts)
+     local opts = {
+        capabilities = require('cmp_nvim_lsp').default_capabilities(
+          vim.lsp.protocol.make_client_capabilities()
+        )
+     }
+     nvim_lsp[server_name].setup(opts)
      end 
    })
+
+
+    -- keyboard shortcut
+    vim.keymap.set('n', 'K',  '<cmd>lua vim.lsp.buf.hover()<CR>')
+    vim.keymap.set('n', 'gf', '<cmd>lua vim.lsp.buf.formatting()<CR>')
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+    vim.keymap.set('n', 'gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+    vim.keymap.set('n', 'gn', '<cmd>lua vim.lsp.buf.rename()<CR>')
+    vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+    vim.keymap.set('n', 'ge', '<cmd>lua vim.diagnostic.open_float()<CR>')
+    vim.keymap.set('n', 'g]', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    vim.keymap.set('n', 'g[', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+
 
     -- 補完機能の設定
     vim.opt.completeopt = "menu,menuone,noselect"
@@ -522,6 +520,5 @@ vim.notify.setup({
   icons = {ERROR = "", WARN = "", INFO = "", DEBUG = "",TRACE = "✎" },
 })
 EOF
-
 
 
