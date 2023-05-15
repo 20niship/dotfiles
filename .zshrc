@@ -387,12 +387,45 @@ function gs() {
 
 # fd - cd to selected directory
 # sudo apt-get install fzf
-fd() {
+function fd() {
   local dir
   # dir=$(find ${1:-.} -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
   dir=$(find ~/Desktop -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf +m) &&
   cd "$dir"
 }
+
+# Gitリポジトリの一覧を取得し、fzfで選択して移動する関数
+function cdg() {
+  local repo
+  repo=$(git rev-parse --show-toplevel 2>/dev/null) # 現在のディレクトリがGitリポジトリか確認
+
+  if [[ -n "$repo" ]]; then
+    echo "すでにGitリポジトリにいるので移動しませんか？"
+  else
+    # Gitリポジトリの一覧を取得してfzfで選択
+    repo=$(find ~/Desktop -type d -name ".git" -prune 2>/dev/null | sed 's/\.git$//')
+    local selected_repo
+
+    if [[ -n "$repo" ]]; then
+      selected_repo=$(echo "$repo" | fzf --prompt="Select a Git repository: ")
+      if [[ -n "$selected_repo" ]]; then
+        cd "$selected_repo"
+      fi
+    else
+      echo "No Git repositories found."
+    fi
+  fi
+}
+
+# Ctrl+Rを押して履歴検索を開始
+bindkey '^R' fzf_history 
+function select-history() {
+  BUFFER=$(history -n -r 1 | fzf --no-sort +m --query "$LBUFFER" --prompt="History > ")
+  CURSOR=$#BUFFER
+}
+zle -N select-history
+bindkey '^r' select-history
+
 
 
 # makeを自動で実行するコマンド
