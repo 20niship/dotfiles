@@ -232,6 +232,11 @@ alias la='ls -la --color=auto'
 alias l='ls --color=auto'
 alias ll='ls -l --color=auto'
 
+# catにシンタックスハイライトする
+# sudo apt install bat
+# https://github.com/sharkdp/bat/blob/master/README.md#installation
+alias cat='batcat -p --color=always'
+
 alias df="df -Th"
 alias su="su -l"
 alias so='source'
