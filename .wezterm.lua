@@ -17,10 +17,17 @@ config.color_scheme = 'AdventureTime'
 
 config.default_prog = { '/usr/bin/zsh' }
 
+config.use_ime=true;
+
 -- ## Fonts
 -- wezterm ls-fonts --list-systemで使えるフォントの一覧が設定ファイルに書きやすい形で出力される。
-config.font = wezterm.font('MesloLGS NF', {weight="Regular", stretch="Normal", italic=false})
--- config.font = wezterm.font("HackGenNerd Console", {weight="Regular", stretch="Normal", italic=false})
+config.font = wezterm.font( {weight="Regular", stretch="Normal", italic=false})
+config.font = wezterm.font_with_fallback {
+  'MesloLGS NF',
+  'Droid Sans Fallback'
+}
+
+
 config.font_size=11
 
 local act = wezterm.action

@@ -1,0 +1,17 @@
+*~
+.DS_Store
+a.out
+Brewfile.lock.json
+.vscode/
+*.dSYM/
+*.bak
+*.o
+*.elf
+*.swp
+*.a
+.vscode
+compile_flags.txt
+en.subject.pdf
+ja.subject.pdf
+review.html
+.node-version
