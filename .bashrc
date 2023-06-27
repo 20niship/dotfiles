@@ -120,6 +120,3 @@ export PATH="${PATH}:${HOME}/.robotech/bin"
 export PATH="${PATH}:${HOME}/.robotech/bin"
 
 
-sudo gpasswd -a owner docker # user_nameのところは適宜変更を
-sudo newgrp docker
-
