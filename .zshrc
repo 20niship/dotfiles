@@ -1,18 +1,8 @@
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(ssh dir vcs newline virtualenv status)
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-
 # ----------------------------
 # Lang
 # -----------------------------
-#export LANG=ja_JP.UTF-8
-#export LESSCHARSET=utf-8
+export LANG=ja_JP.UTF-8
+export LESSCHARSET=utf-8
 
 # -----------------------------
 # General
@@ -271,43 +261,11 @@ else
   alias diff='diff -u'
 fi
 
-
-# -----------------------------
-# Plugin
-# -----------------------------
-# root のコマンドはヒストリに追加しない
-#if [ $UID = 0 ]; then
-#  unset HISTFILE
-#  SAVEHIST=0
-#fi
-
-#function h {
-#  history
-#}
-
-#function g() {
-#  egrep -r "$1" .
-#}
-
 function t()
 {
   tmux new-session -s $(pwd |sed -E 's!^.+/([^/]+/[^/]+)$!\1!g' | sed -e 's/\./-/g')
 }
 
-function psgrep() {
-  ps aux | grep -v grep | grep "USER.*COMMAND"
-  ps aux | grep -v grep | grep $1
-}
-
-function dstop()
-{
-  docker stop $(docker ps -a -q);
-}
-
-function drm()
-{
-  docker rm $(docker ps -a -q);
-}
 
 # -----------------------------
 # Plugin
@@ -368,28 +326,6 @@ if which go > /dev/null 2>&1  ; then
   export PATH=$PATH:$(go env GOROOT)/bin:$GOPATH/bin
 fi
 
-# -----------------------------
-# Git
-# -----------------------------
-function gt() {
-  git tag --sort -version:refname |
-  fzf-down --multi --preview-window right:70% \
-    --preview 'git show --color=always {} | head -200'
-}
-
-function gr() {
-  git remote -v | awk '{print $1 "\t" $2}' | uniq |
-  fzf-down --tac \
-    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1} | head -200' |
-  cut -d$'\t' -f1
-}
-
-function gs() {
-  git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
-  cut -d: -f1
-}
-
-
 # fd - cd to selected directory
 # sudo apt-get install fzf
 function fd() {
@@ -400,7 +336,7 @@ function fd() {
 }
 
 # Gitリポジトリの一覧を取得し、fzfで選択して移動する関数
-function cdg() {
+function fg() {
   local repo
   repo=$(git rev-parse --show-toplevel 2>/dev/null) # 現在のディレクトリがGitリポジトリか確認
 
@@ -452,10 +388,10 @@ unsetopt correct;
 unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
-export PATH=${PATH}:~/.myenv/nodejs/bin/:~/.myenv/cmake/bin
+export PATH=${PATH}:~/.myenv/bin/
 
-export CC=gcc-11
-export CXX=g++-11
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH

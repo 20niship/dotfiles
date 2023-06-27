@@ -231,7 +231,7 @@ set termguicolors
 
 " ################# 各種プラグインの設定 #################
 " colorscheme moonfly 
-colorscheme everblush 
+colorscheme moonfly
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
