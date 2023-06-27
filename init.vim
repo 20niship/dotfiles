@@ -119,6 +119,9 @@ packadd! matchit
 call dein#begin('~/.cache/dein')                          
   call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
 
+  call dein#add('folke/lazy.nvim')
+  call dein#add("atusy/tsnode-marker.nvim")
+
   " COlorschemes 
   " call dein#add('tomasiser/vim-code-dark')
   " call dein#add('Mofiqul/vscode.nvim')
@@ -215,6 +218,10 @@ call dein#begin('~/.cache/dein')
   " React用のシンタックスハイライト
   call dein#add ('pangloss/vim-javascript')
   call dein#add ('mxw/vim-jsx')
+
+  " latexのシンタックスハイライト
+  call dein#add('lervag/vimtex')
+
 
   call dein#add ('pantharshit00/vim-prisma')
 call dein#end()
