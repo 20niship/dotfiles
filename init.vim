@@ -119,7 +119,8 @@ packadd! matchit
 call dein#begin('~/.cache/dein')                          
   call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
 
-  call dein#add('folke/lazy.nvim')
+  call dein#add('github/copilot.vim')
+
   call dein#add("atusy/tsnode-marker.nvim")
 
   " COlorschemes 
