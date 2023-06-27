@@ -21,10 +21,9 @@ config.use_ime=true;
 
 -- ## Fonts
 -- wezterm ls-fonts --list-systemで使えるフォントの一覧が設定ファイルに書きやすい形で出力される。
-config.font = wezterm.font( {weight="Regular", stretch="Normal", italic=false})
+-- config.font = wezterm.font( {weight="Regular", stretch="Normal", italic=false})
 config.font = wezterm.font_with_fallback {
   'MesloLGS NF',
-  'Droid Sans Fallback'
 }
 
 
