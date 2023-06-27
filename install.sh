@@ -3,7 +3,7 @@
 # current dir
 DOTFILES_DIR=$(cd $(dirname $0); pwd)
 
-for file in .zshrc .gitignore .tmux.conf .clang-format .bashrc
+for file in .zshrc .gitignore .tmux.conf .clang-format .bashrc .wezterm.lua
 do
   rm -rf $HOME/$file
   ln -s $DOTFILES_DIR/$file $HOME/$file
