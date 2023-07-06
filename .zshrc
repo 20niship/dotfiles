@@ -389,6 +389,7 @@ unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
 export PATH=${PATH}:~/.myenv/bin/
+export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
 
 export CC=/usr/bin/clang
 export CXX=/usr/bin/clang++
@@ -397,4 +398,6 @@ export CXX=/usr/bin/clang++
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
 # export ANDROID_SDK_ROOT=$ANDROID_HOME
 # tmux source ~/.tmux.conf
+
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/lib/"
 
