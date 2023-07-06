@@ -215,12 +215,29 @@ setopt inc_append_history
 # alias -g G='| grep'
 # alias -g GI='| grep -ri'
 
-# エイリアス
-alias lst='ls -ltr --color=auto'
-alias ls='ls --color=auto'
-alias la='ls -la --color=auto'
-alias l='ls --color=auto'
-alias ll='ls -l --color=auto'
+
+# check lsd command available
+if type lsd >/dev/null 2>&1; then
+  alias ls='lsd'
+  alias l='lsd'
+  alias ll='lsd -l'
+  alias la='lsd -a'
+  alias lla='lsd -la'
+  alias lt='lsd --tree'
+  alias llt='lsd -l --tree'
+  alias lta='lsd -a --tree'
+  alias llta='lsd -la --tree'
+else
+  alias ls='ls --color=auto'
+  alias l='ls --color=auto'
+  alias ll='ls -l --color=auto'
+  alias la='ls -la --color=auto'
+  alias lla='ls -la --color=auto'
+  alias lt='tree'
+  alias llt='tree -l'
+  alias lta='tree -a'
+  alias llta='tree -la'
+fi
 
 # catにシンタックスハイライトする
 # sudo apt install bat
