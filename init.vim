@@ -223,6 +223,8 @@ call dein#begin('~/.cache/dein')
   " latexのシンタックスハイライト
   call dein#add('lervag/vimtex')
 
+  " バイナリファイルの表示を見やすくする
+  call dein#add('RaafatTurki/hex.nvim')
 
   call dein#add ('pantharshit00/vim-prisma')
 call dein#end()
@@ -396,6 +398,8 @@ autocmd! BufNewFile,BufRead *.vs,*.fs set ft=glsl
 
 lua << EOF
    require("mason").setup()
+
+   require('hex').setup()
 
    local nvim_lsp = require('lspconfig')
    local mason_lspconfig = require('mason-lspconfig')
