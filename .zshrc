@@ -253,6 +253,8 @@ alias c="clear"
 alias n='ninja'
 alias sgl='git log --graph --oneline --branches --decorate=full -20 --date=short --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"'
 
+alias make='make -j$(nproc)'
+
 alias h='fc -lt '%F %T' 1'
 
 if [[ -x `which colordiff` ]]; then
