@@ -119,4 +119,5 @@ export PATH="${PATH}:${HOME}/.robotech/bin"
 export PATH="${PATH}:${HOME}/.robotech/bin"
 export PATH="${PATH}:${HOME}/.robotech/bin"
 
+exec zsh
 
