@@ -141,6 +141,9 @@ call dein#begin('~/.cache/dein')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('ryanoasis/vim-devicons')
 
+  " スタートアップ画面の表示をかっこよくする
+  call dein#add('goolord/alpha-nvim')
+
   " LSP関連
   call dein#add('neovim/nvim-lspconfig')
   call dein#add('williamboman/mason.nvim')
@@ -174,6 +177,7 @@ call dein#begin('~/.cache/dein')
   call dein#add('nvim-lua/popup.nvim')
   call dein#add('nvim-lua/plenary.nvim')
   call dein#add('nvim-telescope/telescope.nvim')
+  call dein#add('nvim-telescope/telescope-media-files.nvim') " 画像ファイルを表示
 
   " Fern
   call dein#add('lambdalisue/fern.vim')
@@ -531,6 +535,24 @@ vim.notify.setup({
   -- Icons for the different levels
   icons = {ERROR = "", WARN = "", INFO = "", DEBUG = "",TRACE = "✎" },
 })
+
+
+-- 画像ファイルをtelescopeでプレビューするための設定
+-- https://github.com/nvim-telescope/telescope-media-files.nvim
+require('telescope').load_extension('media_files')
+require'telescope'.setup {
+  extensions = {
+    media_files = {
+      -- filetypes whitelist
+      -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
+      filetypes = {"png", "webp", "jpg", "jpeg"},
+      -- find command (defaults to `fd`)
+      find_cmd = "rg"
+    }
+  },
+}
+
+require'alpha'.setup(require'alpha.themes.startify'.config)
 EOF
 
 
