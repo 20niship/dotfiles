@@ -156,6 +156,8 @@ call dein#begin('~/.cache/dein')
   call dein#add('hrsh7th/cmp-vsnip')
   call dein#add('hrsh7th/vim-vsnip')
 
+  call dein#add('j-hui/fidget.nvim') " LSPのindexしているところをUI表示
+
   " LSPのエラーを一覧表示
   call dein#add('kyazdani42/nvim-web-devicons')
   call dein#add('folke/trouble.nvim')
@@ -553,6 +555,7 @@ require'telescope'.setup {
 }
 
 require'alpha'.setup(require'alpha.themes.startify'.config)
+require("fidget").setup {}
 EOF
 
 
