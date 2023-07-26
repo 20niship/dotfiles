@@ -410,8 +410,8 @@ DUSABLE_CORRECTION="true";
 export PATH=${PATH}:~/.myenv/bin/
 export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
 
-export CC=/usr/bin/clang
-export CXX=/usr/bin/clang++
+export CC=/usr/bin/clang-17
+export CXX=/usr/bin/clang++-17
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
