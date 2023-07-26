@@ -238,7 +238,7 @@ filetype plugin indent on
 
 set termguicolors 
 
-colorscheme kanagawa
+colorscheme nightfox
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
