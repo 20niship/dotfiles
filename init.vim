@@ -126,12 +126,13 @@ call dein#begin('~/.cache/dein')
   " COlorschemes 
   " call dein#add('tomasiser/vim-code-dark')
   " call dein#add('Mofiqul/vscode.nvim')
-  " call dein#add('tomasr/molokai')
+  call dein#add('tomasr/molokai')
   call dein#add('NLKNguyen/papercolor-theme')
   call dein#add('joshdick/onedark.vim')
   call dein#add("EdenEast/nightfox.nvim")
   call dein#add("bluz71/vim-moonfly-colors")
   call dein#add('Everblush/everblush.vim')
+  call dein#add('rebelot/kanagawa.nvim')
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
@@ -156,17 +157,14 @@ call dein#begin('~/.cache/dein')
   call dein#add('hrsh7th/cmp-vsnip')
   call dein#add('hrsh7th/vim-vsnip')
 
-  call dein#add('j-hui/fidget.nvim') " LSPのindexしているところをUI表示
-
   " LSPのエラーを一覧表示
   call dein#add('kyazdani42/nvim-web-devicons')
   call dein#add('folke/trouble.nvim')
 
+  call dein#add('j-hui/fidget.nvim') " LSPのindexしているところをUI表示
+
   " コメントアウト
   call dein#add('tpope/vim-commentary')
-
-  " gitいろいろ 
-  call dein#add('airblade/vim-gitgutter')
 
   " インデントに薄く縦線をつける
   call dein#add('Yggdroot/indentLine')
@@ -217,30 +215,30 @@ call dein#begin('~/.cache/dein')
   call dein#add('honza/vim-snippets')
   call dein#add('quangnguyen30192/cmp-nvim-ultisnips')
 
-  " glsl shader
-  call dein#add('tikhomirov/vim-glsl')
-
   call dein#add('tpope/vim-surround')
-
-  " React用のシンタックスハイライト
-  call dein#add ('pangloss/vim-javascript')
+  
+  " シンタックスハイライト
+  call dein#add('tikhomirov/vim-glsl') " glsl
+  call dein#add ('pangloss/vim-javascript')  " React
   call dein#add ('mxw/vim-jsx')
-
-  " latexのシンタックスハイライト
-  call dein#add('lervag/vimtex')
-
-  " バイナリファイルの表示を見やすくする
-  call dein#add('RaafatTurki/hex.nvim')
-
+  call dein#add('lervag/vimtex') " latex
+  call dein#add('RaafatTurki/hex.nvim') " バイナリファイル
   call dein#add ('pantharshit00/vim-prisma')
+  call dein#add('norcalli/nvim-colorizer.lua') " カラーを表示
+
+  " gitいろいろ 
+  call dein#add('airblade/vim-gitgutter')
+  call dein#add('tpope/vim-fugitive')
+  call dein#add('akinsho/git-conflict.nvim')
+  call dein#add('lewis6991/gitsigns.nvim')
+  call dein#add('NeogitOrg/neogit')
+  call dein#add('junegunn/gv.vim')
 call dein#end()
 filetype plugin indent on         
 
 set termguicolors 
 
-" ################# 各種プラグインの設定 #################
-" colorscheme moonfly 
-colorscheme moonfly
+colorscheme kanagawa
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
@@ -546,8 +544,8 @@ require'telescope'.setup {
   extensions = {
     media_files = {
       -- filetypes whitelist
-      -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
-      filetypes = {"png", "webp", "jpg", "jpeg"},
+      -- defaults to 
+      filetypes = {"png", "jpg", "mp4", "webm", "pdf"},
       -- find command (defaults to `fd`)
       find_cmd = "rg"
     }
@@ -556,6 +554,11 @@ require'telescope'.setup {
 
 require'alpha'.setup(require'alpha.themes.startify'.config)
 require("fidget").setup {}
+require("fidget").setup {}
+require('gitsigns').setup()
+require('git-conflict').setup()
+require('neogit').setup{}
+
 EOF
 
 
