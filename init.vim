@@ -142,6 +142,8 @@ call dein#begin('~/.cache/dein')
   call dein#add('vim-airline/vim-airline-themes')
   call dein#add('ryanoasis/vim-devicons')
 
+  call dein#add('petertriho/nvim-scrollbar')
+
   " スタートアップ画面の表示をかっこよくする
   call dein#add('goolord/alpha-nvim')
 
@@ -238,7 +240,7 @@ filetype plugin indent on
 
 set termguicolors 
 
-colorscheme nightfox
+colorscheme moonfly
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
@@ -558,7 +560,7 @@ require("fidget").setup {}
 require('gitsigns').setup()
 require('git-conflict').setup()
 require('neogit').setup{}
-
+require("scrollbar").setup()
 EOF
 
 
