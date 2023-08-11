@@ -121,3 +121,4 @@ export PATH="${PATH}:${HOME}/.robotech/bin"
 
 exec zsh
 
+. "$HOME/.cargo/env"
