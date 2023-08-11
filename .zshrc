@@ -407,7 +407,7 @@ unsetopt correct;
 unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
-export PATH=${PATH}:~/.myenv/bin/
+export PATH=${PATH}:~/.myenv/bin/:~/.local/bin
 export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
 
 export CC=/usr/bin/clang-17
