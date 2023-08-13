@@ -401,13 +401,16 @@ done;
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+if [[ -f $HOME/.cargo/env ]]; then
+  source $HOME/.cargo/env
+fi
 
 # コマンドを自動で修正するのをDisableにする
 unsetopt correct;
 unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
-export PATH=${PATH}:~/.myenv/bin/
+export PATH=${PATH}:~/.myenv/bin/:~/.local/bin
 export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
 export PATH="$PATH:`yarn global bin`"
 
