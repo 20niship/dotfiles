@@ -355,27 +355,27 @@ function fd() {
 }
 
 # Gitリポジトリの一覧を取得し、fzfで選択して移動する関数
-function fg() {
-  local repo
-  repo=$(git rev-parse --show-toplevel 2>/dev/null) # 現在のディレクトリがGitリポジトリか確認
+# function fg() {
+#   local repo
+#   repo=$(git rev-parse --show-toplevel 2>/dev/null) # 現在のディレクトリがGitリポジトリか確認
 
-  if [[ -n "$repo" ]]; then
-    echo "すでにGitリポジトリにいるので移動しませんか？"
-  else
-    # Gitリポジトリの一覧を取得してfzfで選択
-    repo=$(find ~/Desktop -type d -name ".git" -prune 2>/dev/null | sed 's/\.git$//')
-    local selected_repo
+#   if [[ -n "$repo" ]]; then
+#     echo "すでにGitリポジトリにいるので移動しませんか？"
+#   else
+#     # Gitリポジトリの一覧を取得してfzfで選択
+#     repo=$(find ~/Desktop -type d -name ".git" -prune 2>/dev/null | sed 's/\.git$//')
+#     local selected_repo
 
-    if [[ -n "$repo" ]]; then
-      selected_repo=$(echo "$repo" | fzf --prompt="Select a Git repository: ")
-      if [[ -n "$selected_repo" ]]; then
-        cd "$selected_repo"
-      fi
-    else
-      echo "No Git repositories found."
-    fi
-  fi
-}
+#     if [[ -n "$repo" ]]; then
+#       selected_repo=$(echo "$repo" | fzf --prompt="Select a Git repository: ")
+#       if [[ -n "$selected_repo" ]]; then
+#         cd "$selected_repo"
+#       fi
+#     else
+#       echo "No Git repositories found."
+#     fi
+#   fi
+# }
 
 # Ctrl+Rを押して履歴検索を開始
 bindkey '^R' fzf_history 
@@ -409,6 +409,7 @@ DUSABLE_CORRECTION="true";
 
 export PATH=${PATH}:~/.myenv/bin/
 export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
+export PATH="$PATH:`yarn global bin`"
 
 export CC=/usr/bin/clang-17
 export CXX=/usr/bin/clang++-17
@@ -419,4 +420,10 @@ export CXX=/usr/bin/clang++-17
 # tmux source ~/.tmux.conf
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/lib/"
+
+
+# minikubeがある場合は kubectl = minkube kubectl にする
+if which minikube > /dev/null 2>&1  ; then
+  alias kubectl="minikube kubectl --"
+fi
 
