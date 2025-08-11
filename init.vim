@@ -133,6 +133,7 @@ call dein#begin('~/.cache/dein')
   call dein#add("bluz71/vim-moonfly-colors")
   call dein#add('Everblush/everblush.vim')
   call dein#add('rebelot/kanagawa.nvim')
+  call dein#add('k4yt3x/ayu-vim-darker')
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
@@ -240,7 +241,12 @@ filetype plugin indent on
 
 set termguicolors 
 
-colorscheme moonfly
+" colorscheme moonfly
+
+set termguicolors     " enable true colors support
+" let ayucolor="mirage" " for mirage version of theme
+let ayucolor="dark"   " for dark version of theme
+colorscheme ayu
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
@@ -280,6 +286,12 @@ nmap <F8> :TagbarToggle<CR>
 " 閉じタグを自動で生成するファイル
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
 
+let g:copilot_filetypes = {
+  \ 'sh': v:true,
+  \ 'glsl': v:true,
+  \ 'vert': v:true,
+  \ 'frag': v:true,
+  \ }
 " filetype plugin on
 " let g:netwr_banner = 0
 " let g:netrw_liststyle = 3
@@ -291,6 +303,8 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
 
 "/// SPLIT BORDER SETTINGS
 hi VertSplit cterm=none
+
+autocmd BufRead,BufNewFile *.urdf set filetype=xml
 
 " ---------------  Indentline --------------------------------
 let g:indentLine_color_gui = "#555555"
@@ -339,9 +353,9 @@ nnoremap <leader>fg <cmd>Telescope git_files<cr>
 
 
 " trouble.nvim
-nnoremap <F2> <cmd>TroubleToggle<cr>
-nnoremap <F5> <cmd>TroubleToggle<cr>
-nnoremap <F3> <cmd>TroubleToggle workspace_diagnostics<cr>
+nnoremap <F2> <cmd>Trouble diagnostics toggle<cr>
+" nnoremap <F5> <cmd>TroubleToggle<cr>
+" nnoremap <F3> <cmd>TroubleToggle workspace_diagnostics<cr>
 
 
 " Provided by setup function
@@ -409,7 +423,7 @@ lua << EOF
 
    local nvim_lsp = require('lspconfig')
    local mason_lspconfig = require('mason-lspconfig')
-   mason_lspconfig.setup_handlers({ function(server_name)
+   mason_lspconfig.setup({ function(server_name)
      local opts = {
         capabilities = require('cmp_nvim_lsp').default_capabilities(
           vim.lsp.protocol.make_client_capabilities()
@@ -467,7 +481,6 @@ lua << EOF
     position = "bottom", -- position of the list can be: bottom, top, left, right
     height = 10, -- height of the trouble list when position is top or bottom
     width = 50, -- width of the list when position is left or right
-    icons = true, -- use devicons for filenames
     mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
     fold_open = "", -- icon used for open folds
     fold_closed = "", -- icon used for closed folds
