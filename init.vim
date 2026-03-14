@@ -250,7 +250,7 @@ filetype plugin indent on
 
 set termguicolors     " enable true colors support
 " let ayucolor="mirage" " for mirage version of theme
-let ayucolor="dark"   " for dark version of theme
+let ayucolor="darker"   " for dark version of theme
 " let ayucolor="darker" 
 colorscheme ayu
 " colorscheme nightfox
