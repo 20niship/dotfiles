@@ -9,6 +9,7 @@ do
   ln -s $DOTFILES_DIR/$file $HOME/$file
 done
 
+mkdir -p ~/.config/nvim
 rm -rf ~/.config/nvim/init.vim
 ln -s $DOTFILES_DIR/init.vim ~/.config/nvim/init.vim
 
