@@ -1,9 +1,6 @@
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
--- This table will hold the configuration.
-local config = {}
-
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
@@ -13,9 +10,9 @@ end
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
-config.color_scheme = 'AdventureTime'
+config.color_scheme = 'Palenight (Gogh)'
 
-config.default_prog = { '/usr/bin/zsh' }
+config.default_prog = { '/bin/zsh' }
 
 config.use_ime=true;
 
@@ -26,11 +23,14 @@ config.font = wezterm.font_with_fallback {
   'MesloLGS NF',
 }
 
+-- This table will hold the configuration.
+local config = {}
 
 config.font_size=11
+config.automatically_reload_config = true
 
 local act = wezterm.action
-config.leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 2000 }
+config.leader = { key = 'l', mods = 'CTRL', timeout_milliseconds = 2000 }
 config.keys = {
   {
     key = '|',

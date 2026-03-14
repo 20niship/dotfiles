@@ -1,3 +1,15 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+if which brew > /dev/null 2>&1  ; then
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # ----------------------------
 # Lang
 # -----------------------------
@@ -215,6 +227,8 @@ setopt inc_append_history
 # alias -g G='| grep'
 # alias -g GI='| grep -ri'
 
+  alias gs='git status'
+  alias ga='git add'
 
 # check lsd command available
 if type lsd >/dev/null 2>&1; then
@@ -242,7 +256,9 @@ fi
 # catにシンタックスハイライトする
 # sudo apt install bat
 # https://github.com/sharkdp/bat/blob/master/README.md#installation
-alias cat='batcat -p --color=always'
+if which bat > /dev/null 2>&1  ; then
+  alias cat='bat -p --color=always'
+fi
 
 alias df="df -Th"
 alias su="su -l"
@@ -253,25 +269,26 @@ alias vim='nvim'
 
 # alias vz='vim ~/.zshrc'
 # alias cp='cp -i'
-# alias rm='rm -i'
 alias mkdir='mkdir -p'
 alias ..='cd ../'
 alias back='pushd'
 alias py='python3'
+# alias python='python3.12'
 
 # alias tma='tmux attach'
 # alias tml='tmux list-window'
 
 alias dki="docker run -i -t -P"
 alias dex="docker exec -i -t"
+# alias pip="pip3"
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 
 alias c="clear"
 alias n='ninja'
 alias sgl='git log --graph --oneline --branches --decorate=full -20 --date=short --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"'
 
+# alias make='make -j10'
 alias make='make -j$(nproc)'
-
 alias h='fc -lt '%F %T' 1'
 
 if [[ -x `which colordiff` ]]; then
@@ -331,10 +348,10 @@ esac
 # -----------------------------
 # Python
 # -----------------------------
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$HOME/:$PATH"
-#eval "$(pyenv init -)"
-alias pipallupgrade="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$HOME/:$PATH"
+##eval "$(pyenv init -)"
+#alias pipallupgrade="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
 
 # -----------------------------
 # Golang
@@ -410,12 +427,14 @@ unsetopt correct;
 unsetopt correct_all;
 DUSABLE_CORRECTION="true";
 
-export PATH=${PATH}:~/.myenv/bin/:~/.local/bin
-export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
+export PATH=${PATH}:~/.mylib/bin/:~/.local/bin
+export PATH=${PATH}:~/.mylib/nvim/bin:$HOME/.cargo/bin
+export PATH=${PATH}:/opt/homebrew/bin/
+export PATH=${PATH}:/opt/homebrew/Cellar/postgresql@16/16.10/bin
 export PATH="$PATH:`yarn global bin`"
 
-export CC=/usr/bin/clang-17
-export CXX=/usr/bin/clang++-17
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
@@ -423,6 +442,7 @@ export CXX=/usr/bin/clang++-17
 # tmux source ~/.tmux.conf
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/lib/"
+export DYLD_LIBRARY_PATH=/usr/local/lib:$DYLD_LIBRARY_PATH
 
 
 # minikubeがある場合は kubectl = minkube kubectl にする
@@ -430,3 +450,8 @@ if which minikube > /dev/null 2>&1  ; then
   alias kubectl="minikube kubectl --"
 fi
 
+if which trash > /dev/null 2>&1  ; then
+  alias rm='trash'
+fi
+
+export PATH="/usr/local/opt/libpq/bin:$PATH"

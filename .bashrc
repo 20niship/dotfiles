@@ -119,6 +119,6 @@ export PATH="${PATH}:${HOME}/.robotech/bin"
 export PATH="${PATH}:${HOME}/.robotech/bin"
 export PATH="${PATH}:${HOME}/.robotech/bin"
 
-exec zsh
+# exec zsh
 
 . "$HOME/.cargo/env"
