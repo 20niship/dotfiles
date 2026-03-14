@@ -246,9 +246,15 @@ call dein#begin('~/.cache/dein')
 call dein#end()
 filetype plugin indent on         
 
-set termguicolors
-let ayucolor="darker" 
-colorscheme nightfox
+
+
+set termguicolors     " enable true colors support
+" let ayucolor="mirage" " for mirage version of theme
+let ayucolor="dark"   " for dark version of theme
+" let ayucolor="darker" 
+colorscheme ayu
+" colorscheme nightfox
+" colorscheme moonfly
 
 " ---------------  airline --------------------------------
 let g:airline_powerline_fonts = 1
@@ -288,6 +294,12 @@ nmap <F8> :TagbarToggle<CR>
 " 閉じタグを自動で生成するファイル
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
 
+let g:copilot_filetypes = {
+  \ 'sh': v:true,
+  \ 'glsl': v:true,
+  \ 'vert': v:true,
+  \ 'frag': v:true,
+  \ }
 " filetype plugin on
 " let g:netwr_banner = 0
 " let g:netrw_liststyle = 3
@@ -299,6 +311,8 @@ let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb,*.php,*.vue,*.ejs'
 
 "/// SPLIT BORDER SETTINGS
 hi VertSplit cterm=none
+
+autocmd BufRead,BufNewFile *.urdf set filetype=xml
 
 " ---------------  Indentline --------------------------------
 let g:indentLine_color_gui = "#555555"
@@ -348,10 +362,6 @@ nnoremap <leader>fg <cmd>Telescope git_files<cr>
 
 " trouble.nvim
 nnoremap <F2> <cmd>Trouble diagnostics toggle<cr>
-
-" Provided by setup function
-" nnoremap <silent> <leader>f :Format<CR>
-
 
 " notification hilights
 highlight NotifyERRORBorder guifg=#8A1F1F
@@ -467,9 +477,8 @@ lua << EOF
       })
     })
  
-   -- LSPのエラー一覧表示（trouble.nvim)
-  require("trouble").setup{ }
-
+-- LSPのエラー一覧表示（trouble.nvim)
+require("trouble").setup{ }
 
 --  vim-notify : notification
 vim.notify =require("notify");
