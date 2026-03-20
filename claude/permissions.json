@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:haraduka.github.io)",
+      "WebFetch(domain:prtimes.jp)",
+      "WebFetch(domain:www.highlanders.co.jp)"
+    ]
+  }
+}
