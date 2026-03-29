@@ -28,23 +28,41 @@ if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
 fi
 
-if command -v jq &> /dev/null; then
-  jq '.statusLine = {
-    "type": "command",
-    "command": "bash '"$HOME"'/.claude/statusline-command.sh"
-  }' ~/.claude/settings.json > ~/.claude/settings.json.tmp && mv ~/.claude/settings.json.tmp ~/.claude/settings.json
+python3 -c "
+import json, sys
 
-  # 通知フック設定をマージ (Stop / Notification)
-  jq --slurpfile hooks "$DOTFILES_DIR/claude/hooks-notification.json" \
-    '. * $hooks[0]' ~/.claude/settings.json > ~/.claude/settings.json.tmp \
-    && mv ~/.claude/settings.json.tmp ~/.claude/settings.json
+settings_path = '$HOME/.claude/settings.json'
+hooks_path = '$DOTFILES_DIR/claude/hooks-notification.json'
+perms_path = '$DOTFILES_DIR/claude/permissions.json'
 
-  # 権限設定をマージ (重複排除しながら allow リストをマージ)
-  jq --slurpfile perms "$DOTFILES_DIR/claude/permissions.json" \
-    '.permissions.allow = ((.permissions.allow // []) + $perms[0].permissions.allow | unique)' \
-    ~/.claude/settings.json > ~/.claude/settings.json.tmp \
-    && mv ~/.claude/settings.json.tmp ~/.claude/settings.json
-else
-  echo "警告: jq が見つかりません。~/.claude/settings.json に statusLine / hooks 設定を手動で追加してください"
-fi
+with open(settings_path) as f:
+    settings = json.load(f)
+
+# statusLine 設定
+settings['statusLine'] = {
+    'type': 'command',
+    'command': 'bash $HOME/.claude/statusline-command.sh'
+}
+
+# 通知フック設定をマージ (deep merge)
+with open(hooks_path) as f:
+    hooks = json.load(f)
+for key, val in hooks.items():
+    if key in settings and isinstance(settings[key], dict) and isinstance(val, dict):
+        settings[key].update(val)
+    else:
+        settings[key] = val
+
+# 権限設定をマージ (重複排除しながら allow リストをマージ)
+with open(perms_path) as f:
+    perms = json.load(f)
+existing_allow = settings.get('permissions', {}).get('allow', [])
+new_allow = perms.get('permissions', {}).get('allow', [])
+merged = sorted(set(existing_allow + new_allow))
+settings.setdefault('permissions', {})['allow'] = merged
+
+with open(settings_path, 'w') as f:
+    json.dump(settings, f, indent=2, ensure_ascii=False)
+    f.write('\n')
+"
 
