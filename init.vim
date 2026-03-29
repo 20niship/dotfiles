@@ -138,6 +138,8 @@ call dein#begin('~/.cache/dein')
 
   " ファイル表示
   " call dein#add('preservim/nerdtree')
+  "
+  call dein#add('OXY2DEV/markview.nvim')
 
   " airline : ステータスバーをかっこよくする
   call dein#add('vim-airline/vim-airline')
