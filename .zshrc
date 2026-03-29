@@ -431,10 +431,17 @@ export PATH=${PATH}:~/.mylib/bin/:~/.local/bin
 export PATH=${PATH}:~/.mylib/nvim/bin:$HOME/.cargo/bin
 export PATH=${PATH}:/opt/homebrew/bin/
 export PATH=${PATH}:/opt/homebrew/Cellar/postgresql@16/16.10/bin
-export PATH="$PATH:`yarn global bin`"
+export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
+export PATH="$PATH:`yarn global bin`:$HOME/.cargo/bin"
 
-export CXX="/usr/bin/clang++-20"
-export CC="/usr/bin/clang-20"
+if which clang-20 > /dev/null 2>&1  ; then
+  export CXX="/usr/bin/clang++-20"
+  export CC="/usr/bin/clang-20"
+fi
+if which gcc-13 > /dev/null 2>&1  ; then
+  export CC="/usr/bin/gcc-13"
+  export CXX="/usr/bin/g++-13"
+fi
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
@@ -449,6 +456,7 @@ export DYLD_LIBRARY_PATH=/usr/local/lib:$DYLD_LIBRARY_PATH
 if which minikube > /dev/null 2>&1  ; then
   alias kubectl="minikube kubectl --"
 fi
+export RCUTILS_COLORIZED_OUTPUT=1
 
 if which trash > /dev/null 2>&1  ; then
   alias rm='trash'
