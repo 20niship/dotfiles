@@ -433,8 +433,8 @@ export PATH=${PATH}:/opt/homebrew/bin/
 export PATH=${PATH}:/opt/homebrew/Cellar/postgresql@16/16.10/bin
 export PATH="$PATH:`yarn global bin`"
 
-export CC=/usr/bin/clang
-export CXX=/usr/bin/clang++
+export CXX="/usr/bin/clang++-20"
+export CC="/usr/bin/clang-20"
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 # export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
