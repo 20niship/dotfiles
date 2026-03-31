@@ -273,7 +273,19 @@ alias mkdir='mkdir -p'
 alias ..='cd ../'
 alias back='pushd'
 alias py='python3'
+
 # alias python='python3.12'
+if which trash > /dev/null 2>&1  ; then
+  alias rm='trash'
+else
+  alias rm='rm -rf'
+fi
+
+alias back='pushd'
+
+alias py='python3.13'
+alias python='python3.13'
+alias python3='python3.13'
 
 # alias tma='tmux attach'
 # alias tml='tmux list-window'
@@ -284,11 +296,12 @@ alias dex="docker exec -i -t"
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 
 alias c="clear"
-alias n='ninja'
+alias n='ninja -j8 '
 alias sgl='git log --graph --oneline --branches --decorate=full -20 --date=short --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"'
 
 # alias make='make -j10'
 alias make='make -j$(nproc)'
+
 alias h='fc -lt '%F %T' 1'
 
 if [[ -x `which colordiff` ]]; then
@@ -344,14 +357,6 @@ case "${OSTYPE}" in
     export MANPATH=/opt/local/share/man:/opt/local/man:$MANPATH
   ;;
 esac
-
-# -----------------------------
-# Python
-# -----------------------------
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH="$PYENV_ROOT/bin:$HOME/:$PATH"
-##eval "$(pyenv init -)"
-#alias pipallupgrade="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip install -U"
 
 # -----------------------------
 # Golang
@@ -432,7 +437,9 @@ export PATH=${PATH}:~/.mylib/nvim/bin:$HOME/.cargo/bin
 export PATH=${PATH}:/opt/homebrew/bin/
 export PATH=${PATH}:/opt/homebrew/Cellar/postgresql@16/16.10/bin
 export PATH=${PATH}:~/.myenv/gcc-linaro-arm-linux-gnueabihf-4.7-2013.04-20130415_linux/bin
-export PATH="$PATH:`yarn global bin`:$HOME/.cargo/bin"
+if which yarn > /dev/null 2>&1  ; then
+  export PATH="$PATH:`yarn global bin`:$HOME/.cargo/bin"
+fi
 
 if which clang-20 > /dev/null 2>&1  ; then
   export CXX="/usr/bin/clang++-20"
@@ -444,9 +451,11 @@ if which gcc-13 > /dev/null 2>&1  ; then
 fi
 
 # export ANDROID_HOME=/usr/lib/android-sdk
-# export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
 # export ANDROID_SDK_ROOT=$ANDROID_HOME
 # tmux source ~/.tmux.conf
+
+nodebrew use v21.0.0
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/lib/"
 export DYLD_LIBRARY_PATH=/usr/local/lib:$DYLD_LIBRARY_PATH
@@ -458,8 +467,6 @@ if which minikube > /dev/null 2>&1  ; then
 fi
 export RCUTILS_COLORIZED_OUTPUT=1
 
-if which trash > /dev/null 2>&1  ; then
-  alias rm='trash'
-fi
-
 export PATH="/usr/local/opt/libpq/bin:$PATH"
+export PATH="$PATH:/opt/homebrew/bin/:/usr/local/texlive/2023/bin/universal-darwin/:/Users/nishimac/VulkanSDK/1.3.280.1/macOS/bin"
+
