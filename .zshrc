@@ -444,11 +444,9 @@ fi
 if which clang-20 > /dev/null 2>&1  ; then
   export CXX="/usr/bin/clang++-20"
   export CC="/usr/bin/clang-20"
-fi
 elif which gcc-13 > /dev/null 2>&1  ; then
   export CC="/usr/bin/gcc-13"
   export CXX="/usr/bin/g++-13"
-fi
 elif which gcc-11 > /dev/null 2>&1  ; then
   export CC=/usr/bin/gcc-11
   export CXX=/usr/bin/g++-11
