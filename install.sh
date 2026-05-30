@@ -23,6 +23,10 @@ rm -f ~/.claude/notify.sh
 ln -s $DOTFILES_DIR/claude/notify.sh ~/.claude/notify.sh
 chmod +x $DOTFILES_DIR/claude/notify.sh
 
+# Claude Code CLAUDE.md
+rm -f ~/.claude/CLAUDE.md
+ln -s $DOTFILES_DIR/claude/CLAUDE.md ~/.claude/CLAUDE.md
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
