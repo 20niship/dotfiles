@@ -13,6 +13,11 @@ mkdir -p ~/.config/nvim
 rm -rf ~/.config/nvim/init.vim
 ln -s $DOTFILES_DIR/init.vim ~/.config/nvim/init.vim
 
+# tmux plugin manager (tpm) を必要に応じてインストール
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 # Claude Code ステータスラインセットアップ
 mkdir -p ~/.claude
 rm -f ~/.claude/statusline-command.sh
