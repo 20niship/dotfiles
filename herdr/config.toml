@@ -20,6 +20,8 @@ split_vertical = "prefix+|"
 split_horizontal = "prefix+minus"
 
 [ui]
+# 新規タブ作成時の名前入力プロンプトを無効化 (auto-rename-tabs.sh が自動命名するため)
+prompt_new_tab_name = false
 # .tmux.conf の `set -g mouse on` に合わせてマウス操作を有効化
 mouse_capture = true
 # .tmux.conf のペイン分割スタイルに合わせて枠線・間隔を表示
