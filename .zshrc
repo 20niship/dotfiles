@@ -256,9 +256,9 @@ fi
 # catにシンタックスハイライトする
 # sudo apt install bat
 # https://github.com/sharkdp/bat/blob/master/README.md#installation
-if which bat > /dev/null 2>&1  ; then
-  alias cat='bat -p --color=always'
-fi
+# if which bat > /dev/null 2>&1  ; then
+#   alias cat='bat -p --color=always'
+# fi
 
 alias df="df -Th"
 alias su="su -l"
