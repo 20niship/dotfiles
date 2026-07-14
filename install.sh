@@ -54,6 +54,11 @@ PLIST_EOF
 launchctl bootout gui/$(id -u) $PLIST >/dev/null 2>&1
 launchctl bootstrap gui/$(id -u) $PLIST >/dev/null 2>&1
 
+# tmux plugin manager (tpm) を必要に応じてインストール
+if [ ! -d ~/.tmux/plugins/tpm ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 # Claude Code ステータスラインセットアップ
 mkdir -p ~/.claude
 rm -f ~/.claude/statusline-command.sh

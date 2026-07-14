@@ -472,3 +472,5 @@ export RCUTILS_COLORIZED_OUTPUT=1
 export PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH="$PATH:/opt/homebrew/bin/:/usr/local/texlive/2023/bin/universal-darwin/:/Users/nishimac/VulkanSDK/1.3.280.1/macOS/bin"
 
+
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
