@@ -13,6 +13,16 @@ mkdir -p ~/.config/nvim
 rm -rf ~/.config/nvim/init.vim
 ln -s $DOTFILES_DIR/init.vim ~/.config/nvim/init.vim
 
+# herdr 設定ファイル
+mkdir -p ~/.config/herdr
+rm -f ~/.config/herdr/config.toml
+ln -s $DOTFILES_DIR/herdr/config.toml ~/.config/herdr/config.toml
+
+# herdr サーバーが起動中なら設定を自動反映する
+if command -v herdr >/dev/null 2>&1 && herdr status server >/dev/null 2>&1; then
+  herdr server reload-config >/dev/null 2>&1
+fi
+
 # Claude Code ステータスラインセットアップ
 mkdir -p ~/.claude
 rm -f ~/.claude/statusline-command.sh
