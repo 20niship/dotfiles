@@ -441,15 +441,15 @@ if which yarn > /dev/null 2>&1  ; then
   export PATH="$PATH:`yarn global bin`:$HOME/.cargo/bin"
 fi
 
-if which clang-20 > /dev/null 2>&1  ; then
-  export CXX="/usr/bin/clang++-20"
-  export CC="/usr/bin/clang-20"
-elif which gcc-13 > /dev/null 2>&1  ; then
+if which gcc-13 > /dev/null 2>&1  ; then
   export CC="/usr/bin/gcc-13"
   export CXX="/usr/bin/g++-13"
 elif which gcc-11 > /dev/null 2>&1  ; then
   export CC=/usr/bin/gcc-11
   export CXX=/usr/bin/g++-11
+elif which clang-20 > /dev/null 2>&1  ; then
+  export CXX="/usr/bin/clang++-20"
+  export CC="/usr/bin/clang-20"
 fi
 
 # export ANDROID_HOME=/usr/lib/android-sdk
