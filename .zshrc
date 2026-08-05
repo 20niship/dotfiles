@@ -441,16 +441,8 @@ if which yarn > /dev/null 2>&1  ; then
   export PATH="$PATH:`yarn global bin`:$HOME/.cargo/bin"
 fi
 
-if which clang-20 > /dev/null 2>&1  ; then
-  export CXX="/usr/bin/clang++-20"
-  export CC="/usr/bin/clang-20"
-elif which gcc-13 > /dev/null 2>&1  ; then
-  export CC="/usr/bin/gcc-13"
-  export CXX="/usr/bin/g++-13"
-elif which gcc-11 > /dev/null 2>&1  ; then
-  export CC=/usr/bin/gcc-11
-  export CXX=/usr/bin/g++-11
-fi
+export CC=/usr/bin/gcc-11
+export CXX=/usr/bin/g++-11
 
 # export ANDROID_HOME=/usr/lib/android-sdk
 export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH
@@ -474,3 +466,6 @@ export PATH="$PATH:/opt/homebrew/bin/:/usr/local/texlive/2023/bin/universal-darw
 
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
