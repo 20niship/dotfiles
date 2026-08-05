@@ -1,0 +1,38 @@
+# herdr configuration
+# ~/.config/herdr/config.toml にシンボリックリンクされる
+# .tmux.conf (dracula テーマ) に合わせて設定
+
+[theme]
+# .tmux.conf で使っている dracula テーマに合わせる
+name = "terminal"
+
+auto_switch = false
+[terminal]
+# .tmux.conf の `set-option -g default-shell /bin/zsh` に合わせる
+default_shell = "/bin/zsh"
+
+[keys]
+# .tmux.conf の `set -g prefix C-b` に合わせる
+prefix = "ctrl+b"
+# .tmux.conf の `bind | split-window -h` (左右分割) に合わせる
+split_vertical = "prefix+|"
+# .tmux.conf の `bind - split-window -v` (上下分割) に合わせる
+split_horizontal = "prefix+minus"
+
+[ui]
+# 新規タブ作成時の名前入力プロンプトを無効化 (auto-rename-tabs.sh が自動命名するため)
+prompt_new_tab_name = false
+# .tmux.conf の `set -g mouse on` に合わせてマウス操作を有効化
+mouse_capture = true
+# .tmux.conf のペイン分割スタイルに合わせて枠線・間隔を表示
+pane_borders = true
+pane_gaps = true
+# ペイン枠線を明るく (dracula の Purple)
+accent = "#bd93f9"
+
+[theme.custom]
+# ペイン枠線を明るく (dracula の Comment 色を使用)
+overlay0 = "#6272a4"
+overlay1 = "#6272a4"
+# ターミナルの赤色を明るく (dracula 公式の Red よりさらに明るく調整)
+red = "#ff7a7a"
