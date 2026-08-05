@@ -1,3 +1,4 @@
+onboarding = false
 # herdr configuration
 # ~/.config/herdr/config.toml にシンボリックリンクされる
 # .tmux.conf (dracula テーマ) に合わせて設定
@@ -36,3 +37,6 @@ overlay0 = "#6272a4"
 overlay1 = "#6272a4"
 # ターミナルの赤色を明るく (dracula 公式の Red よりさらに明るく調整)
 red = "#ff7a7a"
+
+[experimental]
+pane_history = true
