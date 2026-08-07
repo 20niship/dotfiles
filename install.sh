@@ -59,6 +59,14 @@ if [ ! -d ~/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+# Claude Code プラグイン (ponytail / caveman) をインストール
+if command -v claude >/dev/null 2>&1; then
+  claude plugin marketplace add DietrichGebert/ponytail
+  claude plugin install ponytail@ponytail
+  claude plugin marketplace add JuliusBrussee/caveman
+  claude plugin install caveman@caveman
+fi
+
 # Claude Code ステータスラインセットアップ
 mkdir -p ~/.claude
 rm -f ~/.claude/statusline-command.sh
