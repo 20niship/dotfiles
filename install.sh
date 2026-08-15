@@ -3,6 +3,8 @@
 # current dir
 DOTFILES_DIR=$(cd $(dirname $0); pwd)
 
+PY=$(command -v python3 || command -v python)
+
 for file in .zshrc .gitignore .tmux.conf .clang-format .bashrc .wezterm.lua
 do
   rm -rf $HOME/$file
@@ -96,7 +98,12 @@ if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
 fi
 
-python3 -c "
+if [ -z "$PY" ]; then
+  echo "python/python3が見つからないためsettings.jsonのマージをスキップしました" >&2
+  exit 0
+fi
+
+"$PY" -c "
 import json, sys
 
 settings_path = '$HOME/.claude/settings.json'

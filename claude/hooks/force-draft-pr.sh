@@ -1,17 +1,26 @@
 #!/bin/bash
-# gh pr create に --draft が付いてなければ強制的に付与する PreToolUse hook
+# gh pr create に --draft が付いてなければ強制的に付与する(jq非依存、python/python3自動検出)
 
-input=$(/bin/cat)
-command=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
+PY=$(command -v python3 || command -v python)
+[ -z "$PY" ] && exit 0
 
-if printf '%s' "$command" | grep -qE '(^|[; &|])gh pr create\b' && ! printf '%s' "$command" | grep -qE -- '--draft\b'; then
-  new_command=$(printf '%s' "$command" | sed -E 's/(gh pr create)/\1 --draft/')
-  jq -n --arg cmd "$new_command" '{
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      updatedInput: { command: $cmd }
-    }
-  }'
-else
-  exit 0
-fi
+exec "$PY" -c '
+import json
+import re
+import sys
+
+payload = json.load(sys.stdin)
+command = payload.get("tool_input", {}).get("command", "")
+
+if re.search(r"(^|[; &|])gh pr create\b", command) and not re.search(r"--draft\b", command):
+    new_command = re.sub(r"(gh pr create)", r"\1 --draft", command, count=1)
+    json.dump(
+        {
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "updatedInput": {"command": new_command},
+            }
+        },
+        sys.stdout,
+    )
+'
