@@ -1,5 +1,18 @@
 {
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec uv run --no-project .claude/hooks/detect-multiline-comments.py'",
+            "timeout": 30,
+            "statusMessage": "複数行コメントブロックを検知中"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -18,6 +31,20 @@
             "type": "command",
             "command": "bash ~/.claude/notify.sh notification",
             "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(gh pr create:*)",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec .claude/hooks/force-draft-pr.sh'",
+            "timeout": 10,
+            "statusMessage": "--draftでPR作成"
           }
         ]
       }
