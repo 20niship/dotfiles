@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec uv run --no-project .claude/hooks/detect-multiline-comments.py'",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec uv run --no-project $HOME/.claude/hooks/detect-multiline-comments.py'",
             "timeout": 30,
             "statusMessage": "複数行コメントブロックを検知中"
           }
@@ -42,7 +42,7 @@
           {
             "type": "command",
             "if": "Bash(gh pr create:*)",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec .claude/hooks/force-draft-pr.sh'",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec $HOME/.claude/hooks/force-draft-pr.sh'",
             "timeout": 10,
             "statusMessage": "--draftでPR作成"
           }

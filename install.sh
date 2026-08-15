@@ -81,6 +81,16 @@ chmod +x $DOTFILES_DIR/claude/notify.sh
 rm -f ~/.claude/CLAUDE.md
 ln -s $DOTFILES_DIR/claude/CLAUDE.md ~/.claude/CLAUDE.md
 
+# Claude Code フックスクリプト
+mkdir -p ~/.claude/hooks
+for hook in $DOTFILES_DIR/claude/hooks/*
+do
+  hookname=$(basename $hook)
+  rm -f ~/.claude/hooks/$hookname
+  ln -s $hook ~/.claude/hooks/$hookname
+  chmod +x $hook
+done
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
