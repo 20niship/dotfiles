@@ -93,6 +93,15 @@ do
   chmod +x $hook
 done
 
+# Claude Code スキル
+mkdir -p ~/.claude/skills
+for skill in $DOTFILES_DIR/claude/skills/*
+do
+  skillname=$(basename $skill)
+  rm -rf ~/.claude/skills/$skillname
+  ln -s $skill ~/.claude/skills/$skillname
+done
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
