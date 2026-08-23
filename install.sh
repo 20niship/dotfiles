@@ -102,6 +102,15 @@ do
   ln -s $skill ~/.claude/skills/$skillname
 done
 
+# opencode スキル (caveman)
+mkdir -p ~/.config/opencode/skills
+for skill in $DOTFILES_DIR/opencode/skills/*
+do
+  skillname=$(basename $skill)
+  /bin/rm -rf ~/.config/opencode/skills/$skillname
+  ln -s $skill ~/.config/opencode/skills/$skillname
+done
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
