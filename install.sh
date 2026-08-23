@@ -102,6 +102,11 @@ do
   ln -s $skill ~/.claude/skills/$skillname
 done
 
+# opencode 設定ファイル
+mkdir -p ~/.config/opencode
+/bin/rm -f ~/.config/opencode/opencode.json
+ln -s $DOTFILES_DIR/opencode/opencode.json ~/.config/opencode/opencode.json
+
 # opencode スキル (caveman)
 mkdir -p ~/.config/opencode/skills
 for skill in $DOTFILES_DIR/opencode/skills/*
