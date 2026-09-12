@@ -45,6 +45,13 @@
             "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec $HOME/.claude/hooks/force-draft-pr.sh'",
             "timeout": 10,
             "statusMessage": "--draftでPR作成"
+          },
+          {
+            "type": "command",
+            "if": "Bash(git *)",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel)}\" && exec $HOME/.claude/hooks/block-main-branch-git.sh'",
+            "timeout": 10,
+            "statusMessage": "main/master/developへの直接pushをチェック中"
           }
         ]
       }
