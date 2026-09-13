@@ -474,3 +474,10 @@ export PATH="$PATH:${HOME}/.cache/bin/:/opt/homebrew/bin/:/usr/local/texlive/202
 
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+
+# just auto completion https://just.systems/man/en/shell-completion-scripts.html
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit
+compinit
+
