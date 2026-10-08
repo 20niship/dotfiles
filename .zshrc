@@ -481,3 +481,38 @@ fpath=(~/.zsh/completions $fpath)
 autoload -U compinit
 compinit
 
+
+# show: 画像/動画をterminalに表示する (chafa: 画像, mpv: 動画)
+# chafaはkitty/iTerm2/sixel対応端末なら高画質, 無ければ文字描画。mpvはtct出力
+# 複数指定可 (show hoge_*.png)。ファイルごとに 名前 / 解像度 / サイズ を表示
+_show_dims() {
+  local d
+  if command -v ffprobe >/dev/null 2>&1; then
+    d=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$1" 2>/dev/null | head -1)
+  elif command -v identify >/dev/null 2>&1; then
+    d=$(identify -format '%wx%h' "$1[0]" 2>/dev/null)
+  elif command -v sips >/dev/null 2>&1; then
+    d=$(sips -g pixelWidth -g pixelHeight "$1" 2>/dev/null | awk '/pixel(Width|Height)/{a[++n]=$2} END{if(n==2)print a[1]"x"a[2]}')
+  fi
+  echo "${d:-?}"
+}
+show() {
+  local f cmd hint
+  if [[ "$OSTYPE" == darwin* ]]; then hint="brew install"; else hint="sudo apt install"; fi
+  for f in "$@"; do
+    case "${f:l}" in
+      *.mp4|*.mov|*.mkv|*.avi|*.webm|*.m4v) cmd=mpv ;;
+      *) cmd=chafa ;;
+    esac
+    if ! command -v $cmd >/dev/null 2>&1; then
+      echo "show: $cmd が未インストール: $hint $cmd" >&2
+      return 1
+    fi
+    [[ -f $f ]] || { echo "show: $f が見つからない" >&2; continue; }
+    echo "== $f  $(_show_dims "$f")  $(du -h "$f" | cut -f1)"
+    if [[ $cmd == mpv ]]; then mpv --vo=tct --really-quiet "$f"; else chafa "$f"; fi
+  done
+}
+# ファイル名補完 (画像/動画のみ。ディレクトリも辿れる)
+_show() { _files -g '*.(#i)(png|jpg|jpeg|gif|webp|bmp|tiff|svg|heic|mp4|mov|mkv|avi|webm|m4v)(-.)' || _files -/ }
+(( $+functions[compdef] )) && compdef _show show
