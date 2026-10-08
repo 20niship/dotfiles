@@ -516,3 +516,9 @@ show() {
 # ファイル名補完 (画像/動画のみ。ディレクトリも辿れる)
 _show() { _files -g '*.(#i)(png|jpg|jpeg|gif|webp|bmp|tiff|svg|heic|mp4|mov|mkv|avi|webm|m4v)(-.)' || _files -/ }
 (( $+functions[compdef] )) && compdef _show show
+
+# >>> polaris local >>>
+# ~/.local にビルドした librealsense (rs-enumerate-devices など)・tmux・uv・cargo を使う
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# <<< polaris local <<<
