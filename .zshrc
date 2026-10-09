@@ -260,7 +260,7 @@ fi
 #   alias cat='bat -p --color=always'
 # fi
 
-alias df="df -Th"
+alias df="df -h"
 alias su="su -l"
 alias so='source'
 alias vi='nvim'
