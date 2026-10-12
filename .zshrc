@@ -444,6 +444,9 @@ fi
 if which gcc-13 > /dev/null 2>&1  ; then
   export CC="/usr/bin/gcc-13"
   export CXX="/usr/bin/g++-13"
+elif which gcc-12 > /dev/null 2>&1  ; then
+  export CC=/usr/bin/gcc-12
+  export CXX=/usr/bin/g++-12
 elif which gcc-11 > /dev/null 2>&1  ; then
   export CC=/usr/bin/gcc-11
   export CXX=/usr/bin/g++-11
