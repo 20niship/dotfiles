@@ -2,8 +2,9 @@
 
 # current dir
 DOTFILES_DIR=$(cd $(dirname $0); pwd)
+PY=$(command -v python3 || command -v python)
 
-for file in .zshrc .gitignore .clang-format .bashrc .wezterm.lua
+for file in .zshrc .gitignore .tmux.conf .clang-format .bashrc .wezterm.lua
 do
   rm -rf $HOME/$file
   ln -s $DOTFILES_DIR/$file $HOME/$file
@@ -59,6 +60,14 @@ if [ ! -d ~/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
+# Claude Code プラグイン (ponytail / caveman) をインストール
+if command -v claude >/dev/null 2>&1; then
+  claude plugin marketplace add DietrichGebert/ponytail
+  claude plugin install ponytail@ponytail
+  claude plugin marketplace add JuliusBrussee/caveman
+  claude plugin install caveman@caveman
+fi
+
 # Claude Code ステータスラインセットアップ
 mkdir -p ~/.claude
 rm -f ~/.claude/statusline-command.sh
@@ -73,12 +82,50 @@ chmod +x $DOTFILES_DIR/claude/notify.sh
 rm -f ~/.claude/CLAUDE.md
 ln -s $DOTFILES_DIR/claude/CLAUDE.md ~/.claude/CLAUDE.md
 
+# Claude Code フックスクリプト
+mkdir -p ~/.claude/hooks
+for hook in $DOTFILES_DIR/claude/hooks/*
+do
+  hookname=$(basename $hook)
+  rm -f ~/.claude/hooks/$hookname
+  ln -s $hook ~/.claude/hooks/$hookname
+  chmod +x $hook
+done
+
+# Claude Code スキル
+mkdir -p ~/.claude/skills
+for skill in $DOTFILES_DIR/claude/skills/*
+do
+  skillname=$(basename $skill)
+  rm -rf ~/.claude/skills/$skillname
+  ln -s $skill ~/.claude/skills/$skillname
+done
+
+# opencode 設定ファイル
+mkdir -p ~/.config/opencode
+/bin/rm -f ~/.config/opencode/opencode.json
+ln -s $DOTFILES_DIR/opencode/opencode.json ~/.config/opencode/opencode.json
+
+# opencode スキル (caveman)
+mkdir -p ~/.config/opencode/skills
+for skill in $DOTFILES_DIR/opencode/skills/*
+do
+  skillname=$(basename $skill)
+  /bin/rm -rf ~/.config/opencode/skills/$skillname
+  ln -s $skill ~/.config/opencode/skills/$skillname
+done
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
 fi
 
-python3 -c "
+if [ -z "$PY" ]; then
+  echo "python/python3が見つからないためsettings.jsonのマージをスキップしました" >&2
+  exit 0
+fi
+
+"$PY" -c "
 import json, sys
 
 settings_path = '$HOME/.claude/settings.json'

@@ -128,3 +128,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
+
+# >>> polaris local >>>
+# ~/.local にビルドした librealsense (rs-enumerate-devices など)・tmux・uv・cargo を使う
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# <<< polaris local <<<

@@ -260,7 +260,7 @@ fi
 #   alias cat='bat -p --color=always'
 # fi
 
-alias df="df -Th"
+alias df="df -h"
 alias su="su -l"
 alias so='source'
 alias vi='nvim'
@@ -473,10 +473,58 @@ fi
 export RCUTILS_COLORIZED_OUTPUT=1
 
 export PATH="/usr/local/opt/libpq/bin:$PATH"
-export PATH="$PATH:/opt/homebrew/bin/:/usr/local/texlive/2023/bin/universal-darwin/:/Users/nishimac/VulkanSDK/1.3.280.1/macOS/bin"
+export PATH="$PATH:${HOME}/.cache/bin/:/opt/homebrew/bin/:/usr/local/texlive/2023/bin/universal-darwin/:/Users/nishimac/VulkanSDK/1.3.280.1/macOS/bin"
 
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# just auto completion https://just.systems/man/en/shell-completion-scripts.html
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit
+compinit
+
+
+# show: 画像/動画をterminalに表示する (chafa: 画像, mpv: 動画)
+# chafaはkitty/iTerm2/sixel対応端末なら高画質, 無ければ文字描画。mpvはtct出力
+# 複数指定可 (show hoge_*.png)。ファイルごとに 名前 / 解像度 / サイズ を表示
+_show_dims() {
+  local d
+  if command -v ffprobe >/dev/null 2>&1; then
+    d=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$1" 2>/dev/null | head -1)
+  elif command -v identify >/dev/null 2>&1; then
+    d=$(identify -format '%wx%h' "$1[0]" 2>/dev/null)
+  elif command -v sips >/dev/null 2>&1; then
+    d=$(sips -g pixelWidth -g pixelHeight "$1" 2>/dev/null | awk '/pixel(Width|Height)/{a[++n]=$2} END{if(n==2)print a[1]"x"a[2]}')
+  fi
+  echo "${d:-?}"
+}
+show() {
+  local f cmd hint
+  if [[ "$OSTYPE" == darwin* ]]; then hint="brew install"; else hint="sudo apt install"; fi
+  for f in "$@"; do
+    case "${f:l}" in
+      *.mp4|*.mov|*.mkv|*.avi|*.webm|*.m4v) cmd=mpv ;;
+      *) cmd=chafa ;;
+    esac
+    if ! command -v $cmd >/dev/null 2>&1; then
+      echo "show: $cmd が未インストール: $hint $cmd" >&2
+      return 1
+    fi
+    [[ -f $f ]] || { echo "show: $f が見つからない" >&2; continue; }
+    echo "== $f  $(_show_dims "$f")  $(du -h "$f" | cut -f1)"
+    if [[ $cmd == mpv ]]; then mpv --vo=tct --really-quiet "$f"; else chafa "$f"; fi
+  done
+}
+# ファイル名補完 (画像/動画のみ。ディレクトリも辿れる)
+_show() { _files -g '*.(#i)(png|jpg|jpeg|gif|webp|bmp|tiff|svg|heic|mp4|mov|mkv|avi|webm|m4v)(-.)' || _files -/ }
+(( $+functions[compdef] )) && compdef _show show
+
+# >>> polaris local >>>
+# ~/.local にビルドした librealsense (rs-enumerate-devices など)・tmux・uv・cargo を使う
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# <<< polaris local <<<
