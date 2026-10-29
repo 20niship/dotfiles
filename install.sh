@@ -138,7 +138,7 @@ with open(settings_path) as f:
 # statusLine 設定
 settings['statusLine'] = {
     'type': 'command',
-    'command': 'bash $HOME/.claude/statusline-command.sh'
+    'command': 'bash "$HOME/.claude/statusline-command.sh"'
 }
 
 # 通知フック設定をマージ (deep merge)

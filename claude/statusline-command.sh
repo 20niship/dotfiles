@@ -34,6 +34,9 @@ ctx_window_size=$(echo "$input" | jq -r '.context_window.context_window_size // 
 # --- 使用中のモデル ---
 model=$(echo "$input" | jq -r '.model.display_name // .model.id // "unknown"')
 
+# --- セッションの作業タイトル ---
+session_name=$(echo "$input" | jq -r '.session_name // empty | gsub("[\\r\\n\\t]"; " ") | .[:40]')
+
 # --- 応答時間の推定 (トークン数 / ~100 tok/s) ---
 out_tokens=$(echo "$input" | jq -r '.context_window.current_usage.output_tokens // empty')
 resp_time=""
@@ -52,6 +55,7 @@ CYAN='\033[36m'
 GREEN='\033[32m'
 YELLOW='\033[33m'
 RED='\033[31m'
+BRIGHT_RED='\033[91m'
 BLUE='\033[34m'
 RESET='\033[0m'
 DIM='\033[2m'
@@ -60,6 +64,11 @@ BRIGHT_WHITE='\033[97m'
 SEP="${DIM} | ${RESET}"
 
 parts=()
+
+# 作業タイトル
+if [ -n "$session_name" ]; then
+  parts+=("${BOLD}${BRIGHT_RED}${session_name}${RESET}")
+fi
 
 # フォルダ名
 if [ -n "$folder_name" ]; then
