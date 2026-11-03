@@ -115,6 +115,9 @@ do
   ln -s $skill ~/.config/opencode/skills/$skillname
 done
 
+# UsageBar (macOS メニューバーの使用率表示) をビルド・登録する
+bash $DOTFILES_DIR/usagebar/install.sh || echo "UsageBar のインストールに失敗しました" >&2
+
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
   echo '{}' > ~/.claude/settings.json
