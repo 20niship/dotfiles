@@ -295,6 +295,9 @@ alias dex="docker exec -i -t"
 # alias pip="pip3"
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 
+# Desktop の Git repo/worktree、Downloads、Docker の掃除候補を TUI で選択
+cache-clean() { command python3 "$HOME/dotfiles/scripts/cache-clean.py" "$@"; }
+
 alias c="clear"
 alias n='ninja -j8 '
 alias sgl='git log --graph --oneline --branches --decorate=full -20 --date=short --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"'
@@ -460,7 +463,9 @@ export PATH=$HOME/.nodebrew/current/bin:$ANDROID_HOME/tools/bin:$ANDROID_HOME/pl
 # export ANDROID_SDK_ROOT=$ANDROID_HOME
 # tmux source ~/.tmux.conf
 
-nodebrew use v21.0.0
+if command -v nodebrew >/dev/null 2>&1; then
+  nodebrew use v21.0.0
+fi
 
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/lib/"
 export DYLD_LIBRARY_PATH=/usr/local/lib:$DYLD_LIBRARY_PATH
