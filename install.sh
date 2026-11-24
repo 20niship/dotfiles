@@ -24,36 +24,60 @@ if command -v herdr >/dev/null 2>&1 && herdr status server >/dev/null 2>&1; then
   herdr server reload-config >/dev/null 2>&1
 fi
 
-# herdr の新規タブ自動リネームスクリプトを LaunchAgent として登録する
-chmod +x $DOTFILES_DIR/herdr/auto-rename-tabs.sh
-mkdir -p ~/Library/LaunchAgents
-PLIST=~/Library/LaunchAgents/dev.herdr.auto-rename-tabs.plist
-cat > $PLIST <<PLIST_EOF
+# herdr の常駐スクリプトを登録する (macOS: LaunchAgent / Linux: systemd --user)
+register_daemon() {
+  local name=$1 script=$DOTFILES_DIR/herdr/$1.sh
+  chmod +x "$script"
+  if [ "$(uname)" = "Darwin" ]; then
+    local plist=~/Library/LaunchAgents/dev.herdr.$name.plist
+    mkdir -p ~/Library/LaunchAgents
+    cat > "$plist" <<PLIST_EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
   <key>Label</key>
-  <string>dev.herdr.auto-rename-tabs</string>
+  <string>dev.herdr.$name</string>
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>$DOTFILES_DIR/herdr/auto-rename-tabs.sh</string>
+    <string>$script</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
   <key>KeepAlive</key>
   <true/>
   <key>StandardOutPath</key>
-  <string>$HOME/.config/herdr/auto-rename-tabs.log</string>
+  <string>$HOME/.config/herdr/$name.log</string>
   <key>StandardErrorPath</key>
-  <string>$HOME/.config/herdr/auto-rename-tabs.log</string>
+  <string>$HOME/.config/herdr/$name.log</string>
 </dict>
 </plist>
 PLIST_EOF
+    launchctl bootout gui/$(id -u) "$plist" >/dev/null 2>&1
+    launchctl bootstrap gui/$(id -u) "$plist" >/dev/null 2>&1
+  elif command -v systemctl >/dev/null 2>&1; then
+    mkdir -p ~/.config/systemd/user
+    cat > ~/.config/systemd/user/dev.herdr.$name.service <<UNIT_EOF
+[Unit]
+Description=herdr $name
 
-launchctl bootout gui/$(id -u) $PLIST >/dev/null 2>&1
-launchctl bootstrap gui/$(id -u) $PLIST >/dev/null 2>&1
+[Service]
+ExecStart=/bin/bash $script
+Restart=always
+
+[Install]
+WantedBy=default.target
+UNIT_EOF
+    systemctl --user daemon-reload
+    systemctl --user enable dev.herdr.$name.service >/dev/null 2>&1
+    systemctl --user restart dev.herdr.$name.service
+  else
+    echo "launchd/systemd が無いため $name の常駐登録をスキップしました" >&2
+  fi
+}
+register_daemon auto-rename-tabs
+register_daemon auto-approve
 
 # tmux plugin manager (tpm) を必要に応じてインストール
 if [ ! -d ~/.tmux/plugins/tpm ]; then
@@ -116,7 +140,9 @@ do
 done
 
 # UsageBar (macOS メニューバーの使用率表示) をビルド・登録する
-bash $DOTFILES_DIR/usagebar/install.sh || echo "UsageBar のインストールに失敗しました" >&2
+if [ "$(uname)" = "Darwin" ]; then
+  bash $DOTFILES_DIR/usagebar/install.sh || echo "UsageBar のインストールに失敗しました" >&2
+fi
 
 # ステータスライン設定を settings.json にマージ
 if ! [ -f ~/.claude/settings.json ]; then
