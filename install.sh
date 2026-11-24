@@ -55,6 +55,13 @@ PLIST_EOF
 launchctl bootout gui/$(id -u) $PLIST >/dev/null 2>&1
 launchctl bootstrap gui/$(id -u) $PLIST >/dev/null 2>&1
 
+# herdr の許可質問 自動承認スクリプトも LaunchAgent として登録する
+chmod +x $DOTFILES_DIR/herdr/auto-approve.sh
+PLIST=~/Library/LaunchAgents/dev.herdr.auto-approve.plist
+sed "s/auto-rename-tabs/auto-approve/g" ~/Library/LaunchAgents/dev.herdr.auto-rename-tabs.plist > $PLIST
+launchctl bootout gui/$(id -u) $PLIST >/dev/null 2>&1
+launchctl bootstrap gui/$(id -u) $PLIST >/dev/null 2>&1
+
 # tmux plugin manager (tpm) を必要に応じてインストール
 if [ ! -d ~/.tmux/plugins/tpm ]; then
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
