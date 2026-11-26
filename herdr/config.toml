@@ -21,6 +21,9 @@ split_vertical = "prefix+|"
 split_horizontal = "prefix+minus"
 
 [ui]
+# エージェントのタブ名と作業タイトルを見やすくする
+sidebar_width = 42
+sidebar_max_width = 48
 # 新規タブ作成時の名前入力プロンプトを無効化 (auto-rename-tabs.sh が自動命名するため)
 prompt_new_tab_name = false
 # .tmux.conf の `set -g mouse on` に合わせてマウス操作を有効化
@@ -32,6 +35,24 @@ pane_gaps = true
 accent = "#bd93f9"
 
 agent_panel_sort = "spaces"
+status_indicators = "symbols"
+
+[ui.sidebar.agents]
+# 1行目: 状態・エージェントのアイコン・タブ名
+# 2行目: 作業タイトル。Local・ワークスペース名・claude/codex の文字は出さない
+rows = [
+  ["state_icon", { token = "$agent_icon", bold = true }, "tab"],
+  [{ token = "$task_title", fg = "#cdd6f4" }],
+]
+
+[ui.sidebar.agents.rows_by_agent]
+claude = [["state_icon", { token = "$agent_icon", fg = "#ffb86c", bold = true }, "tab"], [{ token = "$task_title", fg = "#cdd6f4" }]]
+codex = [["state_icon", { token = "$agent_icon", fg = "#8be9fd", bold = true }, "tab"], [{ token = "$task_title", fg = "#cdd6f4" }]]
+
+[ui.sidebar.spaces]
+# 上の machines 欄も省略せず、名前を1行で表示する
+rows = [["state_icon", "workspace"], ["branch", "git_status"]]
+
 [theme.custom]
 # ペイン枠線を明るく (dracula の Comment 色を使用)
 overlay0 = "#6272a4"
